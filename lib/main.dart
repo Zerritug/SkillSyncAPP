@@ -6,6 +6,9 @@ void main() {
   runApp(const SkillSyncApp());
 }
 
+
+
+
 class SkillSyncApp extends StatelessWidget {
   const SkillSyncApp({super.key}); 
   @override
@@ -16,6 +19,7 @@ class SkillSyncApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routerConfig: appRouter,
+      
     );
   }
 }
