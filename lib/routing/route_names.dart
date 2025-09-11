@@ -1,4 +1,5 @@
 class RouteNames {
   static const welcome = 'welcome';
-  static const mainMenu = 'mainMenu';
+  static const mainMenu = 'mainmenu';
+  static const mindmap = 'mindmap';
 }
