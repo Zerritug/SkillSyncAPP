@@ -77,7 +77,7 @@ lib/l10n/*.arb
 .swiftpm/
 migrate_working_dir/
 #ignore apps
-# Ignorar plataformas nativas completas (si no las modificas manualmente)
+# Ignorar plataformas
 ios/
 macos/
 windows/

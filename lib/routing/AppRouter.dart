@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/features/AddLesson/Addlesson.dart';
+import 'package:skillsync/features/viewLessons/ViewLessons.dart';
 import '../welcomescreen/screens/welcomescreen.dart';
 import '../mainmenu/screens/mainmenu.dart';
 import '../features/mindmap/screens/mindmap.dart';
@@ -25,9 +26,14 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const MindMap(),
     ),
     GoRoute(
-      name: RouteNames.lessons,
-      path: '/lessons',
+      name: RouteNames.addLessons,
+      path: '/addLessons',
       builder: (context, state) => LessonScreen(),
     ),
+    GoRoute (
+      name: RouteNames.viewLessons,
+      path: '/viewLessons',
+      builder: (context,state)=> LessonListScreen(),
+    )
   ],
 );

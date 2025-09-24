@@ -91,7 +91,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                context.goNamed(RouteNames.lessons);
+                context.go('/addLessons');
               },
               child: const Text('Ver Lecciones'),
             ),
