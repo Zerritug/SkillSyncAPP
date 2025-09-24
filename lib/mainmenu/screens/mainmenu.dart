@@ -4,6 +4,7 @@ import 'package:skillsync/core/constants.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/routing/route_names.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -33,26 +34,66 @@ class MainMenuScreenState extends State<MainMenuScreen> {
       backgroundColor: AppColors.tertiary,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Main Menu'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/welcome');
-              },
-              child: const Text('Go to Welcome Screen'),
-            ),
-            const SizedBox(height: 20),
-            Column(
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text('Progreso General', style: AppTextStyles.greeting2),
+                const SizedBox(width: 40),
                 ElevatedButton(
                   onPressed: () {
                     context.go('/mindmap');
                   },
                   child: const Text('MindMap'),
                 ),
+                const SizedBox(height: 20),
               ],
+            ),
+            const SizedBox(height: 40),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.tertiary,
+                border: Border.all(width: 0.5, color: AppColors.sixtiary),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: 350,
+              height: 200,
+
+              child: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 20)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      "Machine Learning  $data1 %",
+                      style: AppTextStyles.greeting2,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      "Bienestar Mental  $data2 %",
+                      style: AppTextStyles.greeting2,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      "UX Design  $data3 %",
+                      style: AppTextStyles.greeting2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                context.goNamed(RouteNames.lessons);
+              },
+              child: const Text('Ver Lecciones'),
             ),
           ],
         ),

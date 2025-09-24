@@ -1,0 +1,19 @@
+/home/zerritug/Android/Sdk/cmake/3.22.1/bin/cmake \
+  -H/home/zerritug/snap/flutter/common/flutter/packages/flutter_tools/gradle/src/main/groovy \
+  -DCMAKE_SYSTEM_NAME=Android \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  -DCMAKE_SYSTEM_VERSION=21 \
+  -DANDROID_PLATFORM=android-21 \
+  -DANDROID_ABI=x86 \
+  -DCMAKE_ANDROID_ARCH_ABI=x86 \
+  -DANDROID_NDK=/home/zerritug/Android/Sdk/ndk/27.0.12077973 \
+  -DCMAKE_ANDROID_NDK=/home/zerritug/Android/Sdk/ndk/27.0.12077973 \
+  -DCMAKE_TOOLCHAIN_FILE=/home/zerritug/Android/Sdk/ndk/27.0.12077973/build/cmake/android.toolchain.cmake \
+  -DCMAKE_MAKE_PROGRAM=/home/zerritug/Android/Sdk/cmake/3.22.1/bin/ninja \
+  -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/home/zerritug/SkillSync/skillsync/build/app/intermediates/cxx/Debug/5f5s2d6n/obj/x86 \
+  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/home/zerritug/SkillSync/skillsync/build/app/intermediates/cxx/Debug/5f5s2d6n/obj/x86 \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -B/home/zerritug/SkillSync/skillsync/android/app/.cxx/Debug/5f5s2d6n/x86 \
+  -GNinja \
+  -Wno-dev \
+  --no-warn-unused-cli
