@@ -1,4 +1,4 @@
-#Tue Sep 23 20:56:24 COT 2025
+#Wed Sep 24 21:29:12 COT 2025
 base.0=/home/zerritug/SkillSync/skillsync/build/app/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/home/zerritug/SkillSync/skillsync/build/app/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
 base.2=/home/zerritug/SkillSync/skillsync/build/app/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex

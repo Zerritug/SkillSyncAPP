@@ -4,7 +4,6 @@ import '../../db/SKDataBase.dart';
 import '../../db/Models/Lesson.dart';
 import 'package:go_router/go_router.dart';
 
-
 class LessonListScreen extends StatefulWidget {
   const LessonListScreen({super.key});
 
@@ -43,13 +42,25 @@ class _LessonListScreenState extends State<LessonListScreen> {
         itemCount: lessons.length,
         itemBuilder: (_, index) {
           final lesson = lessons[index];
-          return ListTile(
-            title: Text(lesson.title),
-            subtitle: Text('Estado: ${lesson.state ? "Completada" : "Pendiente"}'),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => _deleteLesson(lesson.id!),
-            ),
+          return Column(
+            children: [
+              ListTile(
+                title: Text(lesson.title),
+                subtitle: Text(
+                  'Estado: ${lesson.state ? "Completada" : "Pendiente"}',
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => _deleteLesson(lesson.id!),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.go('/mainmenu');
+                },
+                child: const Text('Volver'),
+              ),
+            ],
           );
         },
       ),

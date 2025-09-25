@@ -9,7 +9,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE user (
@@ -20,12 +20,13 @@ class AppDatabase {
         ''');
 
         await db.execute('''
-          CREATE TABLE category (
+          CREATE TABLE topic (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
-            description TEXT,
+            content TEXT,
             date TEXT,
-            lesson_count INTEGER
+            state BOOLEAN
+            
           )
         ''');
 
@@ -69,6 +70,17 @@ class AppDatabase {
             FOREIGN KEY (category_id) REFERENCES category(id),
             FOREIGN KEY (user_name) REFERENCES user(name)
           )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS topic (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    content TEXT,
+    date TEXT,
+    state BOOLEAN
+  )
         ''');
       },
     );

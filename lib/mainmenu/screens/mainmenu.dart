@@ -93,7 +93,26 @@ class MainMenuScreenState extends State<MainMenuScreen> {
               onPressed: () {
                 context.go('/addLessons');
               },
+              child: const Text('Añadir Lecciones'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => context.go('/viewLessons'),
               child: const Text('Ver Lecciones'),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/addTopics');
+              },
+              child: const Text('Añadir Tema'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/viewTopics');
+              },
+              child: const Text('Ver Temas'),
             ),
           ],
         ),

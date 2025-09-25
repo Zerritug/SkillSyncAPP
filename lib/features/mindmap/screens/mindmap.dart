@@ -13,29 +13,6 @@ class _MindMapState extends State<MindMap> {
   String statusMessage = 'Cargando...';
 
   @override
-  void initState() {
-    super.initState();
-    _initDB();
-  }
-
-  Future<void> _initDB() async {
-    try {
-      final db = await AppDatabase.initDB();
-      await db.insert('user', {'name': 'Alice', 'level': 'beginner'});
-      final users = await db.query('user');
-      setState(() {
-        statusMessage = 'Usuarios cargados: ${users.length}';
-      });
-      print(users);
-    } catch (e) {
-      setState(() {
-        statusMessage = 'Error al cargar usuarios';
-      });
-      print('DB error: $e');
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Mind Map')),

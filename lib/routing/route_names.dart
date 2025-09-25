@@ -4,5 +4,6 @@ class RouteNames {
   static const mindmap = 'mindmap';
   static const addLessons = 'addLessons';
   static const viewLessons = 'viewLessons';
-
+  static const addtopic = 'addTopics';
+  static const viewtopics = 'viewTopics';
 }

@@ -35,9 +35,9 @@ class _LessonScreen extends State<LessonScreen> {
     userIdController.clear();
     categoryIdController.clear();
     setState(() => state = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Lección agregada')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Lección agregada')));
   }
 
   @override
@@ -48,21 +48,45 @@ class _LessonScreen extends State<LessonScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            TextField(controller: titleController, decoration: const InputDecoration(labelText: 'Título')),
-            TextField(controller: contentController, decoration: const InputDecoration(labelText: 'Contenido')),
-            TextField(controller: dateController, decoration: const InputDecoration(labelText: 'Fecha')),
-            TextField(controller: userIdController, decoration: const InputDecoration(labelText: 'ID Usuario')),
-            TextField(controller: categoryIdController, decoration: const InputDecoration(labelText: 'ID Categoría')),
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(labelText: 'Título'),
+            ),
+            TextField(
+              controller: contentController,
+              decoration: const InputDecoration(labelText: 'Contenido'),
+            ),
+            TextField(
+              controller: dateController,
+              decoration: const InputDecoration(labelText: 'Fecha'),
+            ),
+            TextField(
+              controller: userIdController,
+              decoration: const InputDecoration(labelText: 'ID Usuario'),
+            ),
+            TextField(
+              controller: categoryIdController,
+              decoration: const InputDecoration(labelText: 'ID Categoría'),
+            ),
             Row(
               children: [
                 const Text('Completada'),
-                Checkbox(value: state, onChanged: (val) => setState(() => state = val ?? false)),
+                Checkbox(
+                  value: state,
+                  onChanged: (val) => setState(() => state = val ?? false),
+                ),
               ],
             ),
             ElevatedButton(onPressed: _addLesson, child: const Text('Guardar')),
             ElevatedButton(
               onPressed: () => context.go('/viewLessons'),
               child: const Text('Ver Lecciones'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/mainmenu');
+              },
+              child: const Text('Volver'),
             ),
           ],
         ),
