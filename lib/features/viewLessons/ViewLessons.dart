@@ -34,35 +34,140 @@ class _LessonListScreenState extends State<LessonListScreen> {
     _loadLessons();
   }
 
+  void _ShowEdit(Lesson lesson) {
+    final titlectrl = TextEditingController(text: lesson.title);
+    final conentctrl = TextEditingController(text: lesson.content);
+    final datectrl = TextEditingController(text: lesson.date);
+    final useridctrl = TextEditingController(text: lesson.userId.toString());
+    final categoryidctrl = TextEditingController(
+      text: lesson.categoryId.toString(),
+    );
+    bool iscompleted = lesson.state;
+
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: const Text("Editar Leccion"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: titlectrl,
+                    decoration: const InputDecoration(
+                      labelText: "Editar Titulo",
+                    ),
+                  ),
+                  TextField(
+                    controller: conentctrl,
+                    decoration: const InputDecoration(
+                      labelText: "Editar contenido",
+                    ),
+                  ),
+                  TextField(
+                    controller: datectrl,
+                    decoration: InputDecoration(labelText: "Editar Fecha"),
+                  ),
+                  TextField(
+                    controller: useridctrl,
+                    decoration: InputDecoration(
+                      label: Text("Editar Id De Usario"),
+                    ),
+                  ),
+                  TextField(
+                    controller: categoryidctrl,
+                    decoration: InputDecoration(
+                      label: Text("Editar Id De Categoria"),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Text("Completado"),
+                      Checkbox(
+                        value: iscompleted,
+                        onChanged:
+                            (val) => setState(() => iscompleted = val ?? false),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  final db = await AppDatabase.initDB();
+                  await db.update(
+                    'topic',
+                    {
+                      'title': titlectrl.text,
+                      'content': conentctrl.text,
+                      'date': datectrl.text,
+                    },
+                    where: 'id = ?',
+                    whereArgs: [lesson.id],
+                  );
+                  Navigator.pop(context);
+                  _loadLessons();
+                },
+                child: const Text("Guardar"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('cancelar'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Lista de Lecciones')),
-      body: ListView.builder(
-        itemCount: lessons.length,
-        itemBuilder: (_, index) {
-          final lesson = lessons[index];
-          return Column(
-            children: [
-              ListTile(
-                title: Text(lesson.title),
-                subtitle: Text(
-                  'Estado: ${lesson.state ? "Completada" : "Pendiente"}',
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => _deleteLesson(lesson.id!),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context.go('/mainmenu');
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: lessons.length,
+                itemBuilder: (_, index) {
+                  final lesson = lessons[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      title: Text(lesson.title),
+                      subtitle: Text(
+                        'Estado: ${lesson.state ? "Completada" : "Pendiente"}',
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => _deleteLesson(lesson.id!),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.update),
+                            onPressed: () => _ShowEdit(lesson),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
-                child: const Text('Volver'),
               ),
-            ],
-          );
-        },
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/mainmenu');
+              },
+              child: const Text('Volver'),
+            ),
+          ],
+        ),
       ),
     );
   }

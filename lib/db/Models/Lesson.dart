@@ -4,8 +4,8 @@ class Lesson {
   final String content;
   final String date;
   final bool state;
-  final int userId;
-  final int categoryId;
+  final int? userId;
+  final int? categoryId;
   Lesson({
     this.id,
     required this.title,

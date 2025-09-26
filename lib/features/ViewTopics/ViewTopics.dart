@@ -12,6 +12,7 @@ class TopicListScreen extends StatefulWidget {
 
 class _TopicListScreenState extends State<TopicListScreen> {
   List<Topic> topics = [];
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +33,77 @@ class _TopicListScreenState extends State<TopicListScreen> {
     _loadTopics();
   }
 
+  void _ShowEdit(Topic topic) {
+    final titlectrl = TextEditingController(text: topic.title);
+    final conentctrl = TextEditingController(text: topic.content);
+    final datectrl = TextEditingController(text: topic.date);
+    bool iscompleted = topic.state;
+
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: const Text("Editar Tema"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: titlectrl,
+                    decoration: const InputDecoration(
+                      labelText: "Editar Titulo",
+                    ),
+                  ),
+                  TextField(
+                    controller: conentctrl,
+                    decoration: const InputDecoration(
+                      labelText: "Editar contenido",
+                    ),
+                  ),
+                  TextField(
+                    controller: datectrl,
+                    decoration: InputDecoration(labelText: "Editar fecha"),
+                  ),
+                  Row(
+                    children: [
+                      const Text("Completado"),
+                      Checkbox(
+                        value: iscompleted,
+                        onChanged:
+                            (val) => setState(() => iscompleted = val ?? false),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  final db = await AppDatabase.initDB();
+                  await db.update(
+                    'topic',
+                    {
+                      'title': titlectrl.text,
+                      'content': conentctrl.text,
+                      'date': datectrl.text,
+                    },
+                    where: 'id = ?',
+                    whereArgs: [topic.id],
+                  );
+                  Navigator.pop(context);
+                  _loadTopics();
+                },
+                child: const Text("Guardar"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('cancelar'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,9 +122,19 @@ class _TopicListScreenState extends State<TopicListScreen> {
                     child: ListTile(
                       title: Text(topic.title),
                       subtitle: Text('Estado'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteLesson(topic.id!),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => _deleteLesson(topic.id!),
+                          ),
+                          const SizedBox(width: 20),
+                          IconButton(
+                            icon: const Icon(Icons.update),
+                            onPressed: () => _ShowEdit(topic),
+                          ),
+                        ],
                       ),
                     ),
                   );
