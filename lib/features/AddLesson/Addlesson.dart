@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/routing/route_names.dart';
 import '../../db/SKDataBase.dart';
 import '../../db/Models/Lesson.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/core/theme/text_styles.dart';
 
 class LessonScreen extends StatefulWidget {
   const LessonScreen({super.key});
@@ -43,7 +46,12 @@ class _LessonScreen extends State<LessonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Agregar Lección')),
+      appBar: AppBar(
+         backgroundColor: AppColors.eightiary,
+        title: const Text('Agregar Lección', 
+        style: AppTextStyles.titlesW)
+        ),
+       
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
@@ -77,16 +85,18 @@ class _LessonScreen extends State<LessonScreen> {
                 ),
               ],
             ),
-            ElevatedButton(onPressed: _addLesson, child: const Text('Guardar')),
+            ElevatedButton(onPressed: _addLesson, style: ButtonStyles.elevatedbutton4, child: const Text('Guardar', style: AppTextStyles.button3)),
             ElevatedButton(
               onPressed: () => context.go('/viewLessons'),
-              child: const Text('Ver Lecciones'),
+              style: ButtonStyles.elevatedbutton1,
+              child: const Text('Ver Lecciones', style: AppTextStyles.button3),
             ),
             ElevatedButton(
               onPressed: () {
                 context.go('/mainmenu');
               },
-              child: const Text('Volver'),
+               style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style:  AppTextStyles.button3),
             ),
           ],
         ),

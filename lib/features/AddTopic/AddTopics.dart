@@ -3,7 +3,9 @@ import 'package:skillsync/routing/route_names.dart';
 import '../../db/SKDataBase.dart';
 import '../../db/Models/Lesson.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/core/theme/text_styles.dart';
+import "package:skillsync/core/theme/app_colors.dart";
 class TopicScreen extends StatefulWidget {
   const TopicScreen({super.key});
 
@@ -38,7 +40,7 @@ class _TopicScreen extends State<TopicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Agregar Tema')),
+      appBar: AppBar(title: const Text('Agregar Tema'), backgroundColor: AppColors.boldcolor,),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
@@ -67,14 +69,16 @@ class _TopicScreen extends State<TopicScreen> {
               ],
             ),
 
-            ElevatedButton(onPressed: _addTopic, child: const Text('Guardar')),
+            ElevatedButton(onPressed: _addTopic, style: ButtonStyles.elevatedbutton4, child: const Text('Guardar', style: AppTextStyles.button3)),
             ElevatedButton(
               onPressed: () => context.go('/viewTopics'),
-              child: const Text('Ver Temas'),
+              style: ButtonStyles.elevatedbutton1,
+              child: const Text('Ver Temas', style: AppTextStyles.button3),
             ),
             ElevatedButton(
               onPressed: () => context.go('/mainmenu'),
-              child: const Text('Volver'),
+               style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style:  AppTextStyles.button3),
             ),
           ],
         ),

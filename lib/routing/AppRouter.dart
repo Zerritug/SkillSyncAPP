@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:skillsync/features/ViewTopics/ViewTopics.dart';
 import 'package:skillsync/features/AddLesson/Addlesson.dart';
 import 'package:skillsync/features/AddTopic/AddTopics.dart';
+import 'package:skillsync/features/stats/stats.dart';
 import 'package:skillsync/features/viewLessons/ViewLessons.dart';
 import '../welcomescreen/screens/welcomescreen.dart';
 import '../mainmenu/screens/mainmenu.dart';
@@ -46,5 +47,10 @@ final GoRouter appRouter = GoRouter(
       path: '/viewTopics',
       builder: (context, state) => TopicListScreen(),
     ),
+    GoRoute(
+      name: RouteNames.stats,
+      path: '/stats',
+      builder:(context, state) => Estadisticas()
+    )
   ],
 );

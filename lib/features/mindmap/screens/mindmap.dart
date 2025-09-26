@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../db/SKDataBase.dart';
+import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/core/theme/text_styles.dart';
 
 class MindMap extends StatefulWidget {
   const MindMap({super.key});
@@ -28,7 +30,8 @@ class _MindMapState extends State<MindMap> {
               onPressed: () {
                 context.go('/mainmenu');
               },
-              child: const Text('Volver'),
+              style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style: AppTextStyles.button3),
             ),
           ],
         ),

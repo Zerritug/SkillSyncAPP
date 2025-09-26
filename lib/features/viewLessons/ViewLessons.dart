@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/routing/route_names.dart';
 import '../../db/SKDataBase.dart';
 import '../../db/Models/Lesson.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/core/theme/text_styles.dart';
 
 class LessonListScreen extends StatefulWidget {
   const LessonListScreen({super.key});
@@ -124,7 +127,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de Lecciones')),
+      appBar: AppBar(title: const Text('Lista de Lecciones', style: AppTextStyles.titlesW), backgroundColor: AppColors.quaternary),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -164,7 +167,8 @@ class _LessonListScreenState extends State<LessonListScreen> {
               onPressed: () {
                 context.go('/mainmenu');
               },
-              child: const Text('Volver'),
+               style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style:  AppTextStyles.button3),
             ),
           ],
         ),

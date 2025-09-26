@@ -3,6 +3,9 @@ import '../../db/SKDataBase.dart';
 import '../../db/Models/Topic.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/core/theme/text_styles.dart';
+import "package:skillsync/core/theme/app_colors.dart";
 
 class TopicListScreen extends StatefulWidget {
   const TopicListScreen({super.key});
@@ -107,7 +110,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de Temas')),
+      appBar: AppBar(title: const Text('Lista de Temas', style: AppTextStyles.titlesW,), backgroundColor: AppColors.primary,),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -146,7 +149,8 @@ class _TopicListScreenState extends State<TopicListScreen> {
               onPressed: () {
                 context.go('/mainmenu');
               },
-              child: const Text('Volver'),
+               style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style:  AppTextStyles.button3),
             ),
             const SizedBox(height: 20),
           ],

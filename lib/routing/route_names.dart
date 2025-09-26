@@ -6,4 +6,5 @@ class RouteNames {
   static const viewLessons = 'viewLessons';
   static const addtopic = 'addTopics';
   static const viewtopics = 'viewTopics';
+  static const stats = 'stats';
 }
