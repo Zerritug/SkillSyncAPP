@@ -6,6 +6,7 @@ import '../../db/Models/Lesson.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
+import '../../db/Models/Topic.dart';
 
 class LessonListScreen extends StatefulWidget {
   const LessonListScreen({super.key});
@@ -35,13 +36,15 @@ class _LessonListScreenState extends State<LessonListScreen> {
     final db = await AppDatabase.initDB();
     await db.delete('lesson', where: 'id = ?', whereArgs: [id]);
     _loadLessons();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Eliminado correctamente")));
   }
 
   void _ShowEdit(Lesson lesson) {
     final titlectrl = TextEditingController(text: lesson.title);
     final conentctrl = TextEditingController(text: lesson.content);
     final datectrl = TextEditingController(text: lesson.date);
-    final useridctrl = TextEditingController(text: lesson.userId.toString());
     final categoryidctrl = TextEditingController(
       text: lesson.categoryId.toString(),
     );
@@ -71,12 +74,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
                     controller: datectrl,
                     decoration: InputDecoration(labelText: "Editar Fecha"),
                   ),
-                  TextField(
-                    controller: useridctrl,
-                    decoration: InputDecoration(
-                      label: Text("Editar Id De Usario"),
-                    ),
-                  ),
+
                   TextField(
                     controller: categoryidctrl,
                     decoration: InputDecoration(
@@ -112,6 +110,9 @@ class _LessonListScreenState extends State<LessonListScreen> {
                   );
                   Navigator.pop(context);
                   _loadLessons();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Editado correctamente")),
+                  );
                 },
                 child: const Text("Guardar"),
               ),
@@ -127,7 +128,10 @@ class _LessonListScreenState extends State<LessonListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de Lecciones', style: AppTextStyles.titlesW), backgroundColor: AppColors.quaternary),
+      appBar: AppBar(
+        title: const Text('Lista de Lecciones', style: AppTextStyles.titlesW),
+        backgroundColor: AppColors.quaternary,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -139,21 +143,40 @@ class _LessonListScreenState extends State<LessonListScreen> {
                   final lesson = lessons[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTile(
-                      title: Text(lesson.title),
-                      subtitle: Text(
-                        'Estado: ${lesson.state ? "Completada" : "Pendiente"}',
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
                       ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => _deleteLesson(lesson.id!),
+                          // Parte izquierda: título y estado
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(lesson.title),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Estado: ${lesson.state ? "Completada" : "Pendiente"}',
+                                ),
+                              ],
+                            ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.update),
-                            onPressed: () => _ShowEdit(lesson),
+
+                          // Parte derecha: botones
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => _deleteLesson(lesson.id!),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => _ShowEdit(lesson),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -167,8 +190,8 @@ class _LessonListScreenState extends State<LessonListScreen> {
               onPressed: () {
                 context.go('/mainmenu');
               },
-               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style:  AppTextStyles.button3),
+              style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style: AppTextStyles.button3),
             ),
           ],
         ),

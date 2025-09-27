@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import "package:skillsync/core/theme/app_colors.dart";
+
 class TopicScreen extends StatefulWidget {
   const TopicScreen({super.key});
 
@@ -21,6 +22,13 @@ class _TopicScreen extends State<TopicScreen> {
   bool isCompleted = false;
 
   Future<void> _addTopic() async {
+    if (titleController.text.isEmpty ||
+        contentController.text.isEmpty ||
+        dateController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Faltan datos")));
+    }
     final db = await AppDatabase.initDB();
     await db.insert('topic', {
       'title': titleController.text,
@@ -40,7 +48,10 @@ class _TopicScreen extends State<TopicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Agregar Tema'), backgroundColor: AppColors.boldcolor,),
+      appBar: AppBar(
+        title: const Text('Agregar Tema'),
+        backgroundColor: AppColors.boldcolor,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
@@ -68,17 +79,26 @@ class _TopicScreen extends State<TopicScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 40),
 
-            ElevatedButton(onPressed: _addTopic, style: ButtonStyles.elevatedbutton4, child: const Text('Guardar', style: AppTextStyles.button3)),
+            ElevatedButton(
+              onPressed: _addTopic,
+              style: ButtonStyles.elevatedbutton4,
+              child: const Text('Guardar', style: AppTextStyles.button3),
+            ),
+            const SizedBox(height: 30),
+
             ElevatedButton(
               onPressed: () => context.go('/viewTopics'),
               style: ButtonStyles.elevatedbutton1,
               child: const Text('Ver Temas', style: AppTextStyles.button3),
             ),
+            const SizedBox(height: 30),
+
             ElevatedButton(
               onPressed: () => context.go('/mainmenu'),
-               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style:  AppTextStyles.button3),
+              style: ButtonStyles.elevatedbutton3,
+              child: const Text('Volver', style: AppTextStyles.button3),
             ),
           ],
         ),

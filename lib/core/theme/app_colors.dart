@@ -8,10 +8,16 @@ class AppColors {
   static const quaternary = Color(0xFF42A5F5);
   static const quinary = Color.fromARGB(255, 253, 214, 41);
   static const sixtiary = Color.fromARGB(255, 139, 139, 139);
-  static const seventiary =  Color.fromARGB(255, 255, 47, 20);
- static const eightiary = Color.fromARGB(255, 141, 20, 255);
-  static const boldcolor = Color(0xFF7D96E8); 
-  
+  static const seventiary = Color.fromARGB(255, 255, 47, 20);
+  static const eightiary = Color.fromARGB(255, 141, 20, 255);
+  static const boldcolor = Color(0xFF7D96E8);
 
-  static const appbargradient = [Color.fromARGB(255, 0, 102, 185), Colors.purple]; 
+  static const appbargradient = [
+    Color.fromARGB(255, 0, 102, 185),
+    Colors.purple,
+  ];
+  static const WelcomeScreen = [
+    Color.fromARGB(255, 0, 12, 185),
+    Color.fromARGB(255, 94, 19, 107),
+  ];
 }
