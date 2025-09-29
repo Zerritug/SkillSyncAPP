@@ -4,7 +4,7 @@ import 'package:skillsync/core/constants.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
-import 'package:skillsync/routing/route_names.dart';
+
 import 'package:skillsync/db/SKDataBase.dart';
 import 'package:skillsync/db/Models/User.dart';
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
-import 'package:skillsync/routing/route_names.dart';
+import 'package:intl/intl.dart';
+
 import '../../db/SKDataBase.dart';
 import '../../db/Models/Lesson.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
-import '../../db/Models/Topic.dart';
 
 class LessonListScreen extends StatefulWidget {
   const LessonListScreen({super.key});
@@ -18,17 +18,37 @@ class LessonListScreen extends StatefulWidget {
 class _LessonListScreenState extends State<LessonListScreen> {
   List<Lesson> lessons = [];
 
+  final TextEditingController _dateSearchCtrl =
+      TextEditingController(); //controlador del campo de la nueva fecha
+
   @override
   void initState() {
     super.initState();
     _loadLessons();
   }
 
+  //cargar lecciones
   Future<void> _loadLessons() async {
     final db = await AppDatabase.initDB();
     final result = await db.query('lesson');
     setState(() {
       lessons = result.map((e) => Lesson.fromMap(e)).toList();
+    });
+  }
+
+  //busqueda por fecha
+  Future<void> _seachlessonbydate(String date) async {
+    final db = await AppDatabase.initDB();
+    final result = await db.query(
+      'lesson',
+      where: 'date = ?',
+      whereArgs: [date],
+    );
+    setState(() {
+      lessons =
+          result
+              .map((e) => Lesson.fromMap(e))
+              .toList(); //cambio de estado para leccion
     });
   }
 
@@ -41,10 +61,12 @@ class _LessonListScreenState extends State<LessonListScreen> {
     ).showSnackBar(const SnackBar(content: Text("Eliminado correctamente")));
   }
 
+  //scontroladores y mostrar dialog para editar las lecciones
   void _ShowEdit(Lesson lesson) {
     final titlectrl = TextEditingController(text: lesson.title);
     final conentctrl = TextEditingController(text: lesson.content);
     final datectrl = TextEditingController(text: lesson.date);
+
     final categoryidctrl = TextEditingController(
       text: lesson.categoryId.toString(),
     );
@@ -97,13 +119,34 @@ class _LessonListScreenState extends State<LessonListScreen> {
             actions: [
               TextButton(
                 onPressed: () async {
+                  final entrada = datectrl.text.trim(); //entrada del uisuario
+                  late final String fechaIso;
+
+                  if (RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(entrada)) {
+                    fechaIso = entrada;
+                  } else {
+                    try {
+                      //fecha que se escribio a el nuevo formato que seria por ejemplo 29/07/2006 a 2007-07-29
+                      fechaIso = DateFormat('yyyy-MM-dd').format(
+                        DateFormat('dd/MM/yyyy').parse(entrada),
+                      ); //formateo de fecha ,
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                        ),
+                      );
+                      return;
+                    }
+                  }
+
                   final db = await AppDatabase.initDB();
                   await db.update(
-                    'topic',
+                    'lesson',
                     {
                       'title': titlectrl.text,
                       'content': conentctrl.text,
-                      'date': datectrl.text,
+                      'date': fechaIso,
                     },
                     where: 'id = ?',
                     whereArgs: [lesson.id],
@@ -136,6 +179,40 @@ class _LessonListScreenState extends State<LessonListScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _dateSearchCtrl,
+                    decoration: InputDecoration(label: Text("Buscar leccion")),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                FilledButton.icon(
+                  onPressed: () {
+                    final entrada = _dateSearchCtrl.text.trim();
+                    try {
+                      //fecha que se escribio a el nuevo formato que seria por ejemplo 29/07/2006 a 2007-07-29
+                      final fechaIso = DateFormat(
+                        'yyyy-MM-dd',
+                      ).format(DateFormat('dd/MM/yyyy').parse(entrada));
+                      //llamado a la funcion de busqueda por fecha
+                      _seachlessonbydate(fechaIso);
+                    } catch (e) {
+                      //mostrar error de escritura de fecha por parte del usuario
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                        ),
+                      );
+                    }
+                  },
+
+                  icon: const Icon(Icons.search),
+                  label: const Text("Buscar"),
+                ),
+              ],
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: lessons.length,
@@ -151,7 +228,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Parte izquierda: título y estado
+                          // Parte izquierda de la card, titulo y estado de la leccion
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +242,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
                             ),
                           ),
 
-                          // Parte derecha: botones
+                          // Parte derecha  botones de edicion y eliminacion
                           Column(
                             children: [
                               IconButton(
@@ -192,6 +269,18 @@ class _LessonListScreenState extends State<LessonListScreen> {
               },
               style: ButtonStyles.elevatedbutton3,
               child: const Text('Volver', style: AppTextStyles.button3),
+            ),
+
+            //mostrar en consola las fechas dentro de las lecciones
+            FilledButton(
+              onPressed: () async {
+                final db = await AppDatabase.initDB();
+                final result = await db.query('lesson');
+                for (var row in result) {
+                  print(row['date']);
+                }
+              },
+              child: const Text("Ver fechas guardadas"),
             ),
           ],
         ),

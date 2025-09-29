@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../db/SKDataBase.dart';
+
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 

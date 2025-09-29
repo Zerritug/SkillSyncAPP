@@ -1,4 +1,3 @@
-import 'package:skillsync/routing/route_names.dart';
 import '../../db/SKDataBase.dart';
 import '../../db/Models/Topic.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import "package:skillsync/core/theme/app_colors.dart";
+import 'package:intl/intl.dart';
 
 class TopicListScreen extends StatefulWidget {
   const TopicListScreen({super.key});
@@ -15,7 +15,7 @@ class TopicListScreen extends StatefulWidget {
 
 class _TopicListScreenState extends State<TopicListScreen> {
   List<Topic> topics = [];
-
+  final TextEditingController datecontroller = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -25,6 +25,18 @@ class _TopicListScreenState extends State<TopicListScreen> {
   Future<void> _loadTopics() async {
     final db = await AppDatabase.initDB();
     final result = await db.query('topic');
+    setState(() {
+      topics = result.map((e) => Topic.fromMap(e)).toList();
+    });
+  }
+
+  Future<void> _searchbydate(String date) async {
+    final db = await AppDatabase.initDB();
+    final result = await db.query(
+      'topic',
+      where: 'date = ?',
+      whereArgs: [date],
+    );
     setState(() {
       topics = result.map((e) => Topic.fromMap(e)).toList();
     });
@@ -43,6 +55,8 @@ class _TopicListScreenState extends State<TopicListScreen> {
     final titlectrl = TextEditingController(text: topic.title);
     final conentctrl = TextEditingController(text: topic.content);
     final datectrl = TextEditingController(text: topic.date);
+    final entrada = datectrl.text.trim();
+
     bool iscompleted = topic.state;
 
     showDialog(
@@ -86,13 +100,41 @@ class _TopicListScreenState extends State<TopicListScreen> {
             actions: [
               TextButton(
                 onPressed: () async {
+                  final entrada = datectrl.text.trim();
+
+                  if (entrada.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("La fecha está vacía")),
+                    );
+                    return;
+                  }
+
+                  late String fechaiso;
+
+                  if (RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(entrada)) {
+                    fechaiso = entrada;
+                  } else {
+                    try {
+                      fechaiso = DateFormat(
+                        'yyyy-MM-dd',
+                      ).format(DateFormat('dd/MM/yyyy').parse(entrada));
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                        ),
+                      );
+                      return;
+                    }
+                  }
+
                   final db = await AppDatabase.initDB();
                   await db.update(
                     'topic',
                     {
                       'title': titlectrl.text,
                       'content': conentctrl.text,
-                      'date': datectrl.text,
+                      'date': fechaiso,
                     },
                     where: 'id = ?',
                     whereArgs: [topic.id],
@@ -125,6 +167,50 @@ class _TopicListScreenState extends State<TopicListScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: datecontroller,
+                    decoration: InputDecoration(label: Text("Buscar leccion")),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                FilledButton.icon(
+                  onPressed: () {
+                    final entrada =
+                        datecontroller.text
+                            .trim(); // Tomamos lo que escribió el usuario
+                    try {
+                      // Si el campo está vacío, mostramos un mensaje
+                      if (entrada.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Esta vacio")),
+                        );
+                      } else {
+                        // Convertimos la fecha escrita (por ejemplo "29/07/2006") al formato ISO ("2006-07-29")
+                        // Esto es importante porque la base de datos guarda las fechas en ese formato
+                        final fechaIso = DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(DateFormat('dd/MM/yyyy').parse(entrada));
+
+                        // función que busca temas por esa fecha
+                        _searchbydate(fechaIso);
+                      }
+                    } catch (e) {
+                      //usuario escribió mal la fecha, mostramos un mensaje de error
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.search),
+                  label: const Text("Buscar"),
+                ),
+              ],
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: topics.length,

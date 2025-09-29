@@ -4,7 +4,6 @@ import 'package:skillsync/core/constants.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/db/SKDataBase.dart';
-import 'package:skillsync/db/Models/User.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});

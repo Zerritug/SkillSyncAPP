@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
-import 'package:skillsync/routing/route_names.dart';
+
 import '../../db/SKDataBase.dart';
-import '../../db/Models/Lesson.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
