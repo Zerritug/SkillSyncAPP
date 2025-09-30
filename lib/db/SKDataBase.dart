@@ -8,7 +8,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE user (
@@ -25,7 +25,6 @@ class AppDatabase {
             content TEXT,
             date TEXT,
             state BOOLEAN
-            
           )
         ''');
 
@@ -48,7 +47,8 @@ class AppDatabase {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             description TEXT,
-            date TEXT
+            date TEXT,
+            state BOOLEAN
           )
         ''');
 
@@ -73,25 +73,30 @@ class AppDatabase {
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        // Eliminar tabla mal escrita si existe
+        await db.execute('DROP TABLE IF EXISTS weekly_objetive');
+
+        // Recrear tabla correcta con todas las columnas
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS weekly_objective (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            description TEXT,
+            date TEXT,
+            state BOOLEAN
+          )
+        ''');
+
+        // Reforzar definición de topic por si faltaba
         await db.execute('''
           CREATE TABLE IF NOT EXISTS topic (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-             title TEXT,
-             content TEXT,
-              date TEXT,
-              state BOOLEAN
-        
-              )
-          
-        ''');
-        await db.execute('''
-      CREATE TABLE IF NOT EXISTS weekly_objective (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    description TEXT,
-    date TEXT
+            title TEXT,
+            content TEXT,
+            date TEXT,
+            state BOOLEAN
           )
-''');
+        ''');
       },
     );
   }

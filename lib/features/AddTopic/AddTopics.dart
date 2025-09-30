@@ -71,7 +71,7 @@ class _TopicScreen extends State<TopicScreen> {
 
             Row(
               children: [
-                const Text('Completada'),
+                const Text('Completado'),
                 Checkbox(
                   value: isCompleted,
                   onChanged:

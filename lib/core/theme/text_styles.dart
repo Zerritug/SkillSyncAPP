@@ -15,7 +15,7 @@ class AppTextStyles {
 
   static const titles = TextStyle(
     color: Color.fromARGB(255, 0, 0, 0),
-    fontSize: 25,
+    fontSize: 16,
     letterSpacing: 1.2,
   );
 
@@ -37,21 +37,21 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
-  static const button1 = TextStyle (
+  static const button1 = TextStyle(
     color: Colors.white,
-  fontSize: 10,
-  fontWeight: FontWeight.w200
+    fontSize: 10,
+    fontWeight: FontWeight.w200,
   );
-  
-  static const button2 = TextStyle (
+
+  static const button2 = TextStyle(
     color: Color.fromARGB(255, 0, 0, 0),
-  fontSize: 10,
-  fontWeight: FontWeight.w200
+    fontSize: 10,
+    fontWeight: FontWeight.w200,
   );
-  
+
   static const button3 = TextStyle(
-     color: Colors.white,
-  fontSize: 10,
-  fontWeight: FontWeight.w200
+    color: Colors.white,
+    fontSize: 10,
+    fontWeight: FontWeight.w200,
   );
 }
