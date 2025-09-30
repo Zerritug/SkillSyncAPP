@@ -8,7 +8,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE user (
@@ -46,6 +46,7 @@ class AppDatabase {
         await db.execute('''
           CREATE TABLE weekly_objective (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
             description TEXT,
             date TEXT
           )
@@ -75,12 +76,22 @@ class AppDatabase {
         await db.execute('''
           CREATE TABLE IF NOT EXISTS topic (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    content TEXT,
-    date TEXT,
-    state BOOLEAN
-  )
+             title TEXT,
+             content TEXT,
+              date TEXT,
+              state BOOLEAN
+        
+              )
+          
         ''');
+        await db.execute('''
+      CREATE TABLE IF NOT EXISTS weekly_objective (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    description TEXT,
+    date TEXT
+          )
+''');
       },
     );
   }

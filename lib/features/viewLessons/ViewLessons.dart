@@ -20,7 +20,11 @@ class _LessonListScreenState extends State<LessonListScreen> {
 
   final TextEditingController _dateSearchCtrl =
       TextEditingController(); //controlador del campo de la nueva fecha
-
+  List<String> listoptions = <String>[
+    'Fecha',
+    'Titulo',
+  ]; //LISTA OPCIONES DROPDWONBUTTON
+  String dropdownbuttonvalue = 'Fecha'; //valor inicial del dropdown
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,18 @@ class _LessonListScreenState extends State<LessonListScreen> {
   Future<void> _loadLessons() async {
     final db = await AppDatabase.initDB();
     final result = await db.query('lesson');
+    setState(() {
+      lessons = result.map((e) => Lesson.fromMap(e)).toList();
+    });
+  }
+
+  Future<void> _searchbytitle(String title) async {
+    final db = await AppDatabase.initDB();
+    final result = await db.query(
+      'lesson',
+      where: 'title LIKE ?',
+      whereArgs: ['%$title%'],
+    );
     setState(() {
       lessons = result.map((e) => Lesson.fromMap(e)).toList();
     });
@@ -181,6 +197,24 @@ class _LessonListScreenState extends State<LessonListScreen> {
           children: [
             Row(
               children: [
+                DropdownButton(
+                  //dropdown button sirve para mostrar varias opciones desplegables para eligir
+                  value: dropdownbuttonvalue,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownbuttonvalue = value!;
+                    });
+                  },
+                  items:
+                      listoptions.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                ),
                 Expanded(
                   child: TextField(
                     controller: _dateSearchCtrl,
@@ -191,20 +225,37 @@ class _LessonListScreenState extends State<LessonListScreen> {
                 FilledButton.icon(
                   onPressed: () {
                     final entrada = _dateSearchCtrl.text.trim();
-                    try {
-                      //fecha que se escribio a el nuevo formato que seria por ejemplo 29/07/2006 a 2007-07-29
-                      final fechaIso = DateFormat(
-                        'yyyy-MM-dd',
-                      ).format(DateFormat('dd/MM/yyyy').parse(entrada));
-                      //llamado a la funcion de busqueda por fecha
-                      _seachlessonbydate(fechaIso);
-                    } catch (e) {
-                      //mostrar error de escritura de fecha por parte del usuario
+
+                    if (entrada.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
-                        ),
+                        const SnackBar(content: Text("Esta vacio")),
                       );
+                      return;
+                    }
+
+                    if (dropdownbuttonvalue == 'Fecha') {
+                      //si el valor principal que se declaro en la cclase
+                      try {
+                        //es fecha buscara por fecha en dado caso cambie de estado a titulo y buscara por ese mismo
+                        final fechaIso = DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(DateFormat('dd/MM/yyyy').parse(entrada));
+                        _seachlessonbydate(fechaIso);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                          ),
+                        );
+                      }
+                    } else if (dropdownbuttonvalue == 'Titulo') {
+                      try {
+                        _searchbytitle(entrada);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Texto no encontrado")),
+                        );
+                      }
                     }
                   },
 
@@ -269,18 +320,6 @@ class _LessonListScreenState extends State<LessonListScreen> {
               },
               style: ButtonStyles.elevatedbutton3,
               child: const Text('Volver', style: AppTextStyles.button3),
-            ),
-
-            //mostrar en consola las fechas dentro de las lecciones
-            FilledButton(
-              onPressed: () async {
-                final db = await AppDatabase.initDB();
-                final result = await db.query('lesson');
-                for (var row in result) {
-                  print(row['date']);
-                }
-              },
-              child: const Text("Ver fechas guardadas"),
             ),
           ],
         ),

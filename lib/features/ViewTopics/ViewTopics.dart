@@ -15,7 +15,15 @@ class TopicListScreen extends StatefulWidget {
 
 class _TopicListScreenState extends State<TopicListScreen> {
   List<Topic> topics = [];
-  final TextEditingController datecontroller = TextEditingController();
+  final TextEditingController searchdatecontroller =
+      TextEditingController(); //controlador para la busqueda por fecvha
+  final TextEditingController searchtitlecontroller =
+      TextEditingController(); //controlador para la busqueda por titulo
+  List<String> listoptions = <String>[
+    'Fecha',
+    'Titulo',
+  ]; //lista opciones dropdown button para esgoer que metodo se usara en la busqeuda
+  String dropdownbuttonvalue = 'Fecha'; //valor inicial del dropdown
   @override
   void initState() {
     super.initState();
@@ -42,6 +50,19 @@ class _TopicListScreenState extends State<TopicListScreen> {
     });
   }
 
+  Future<void> _searchbywords(String title) async {
+    final db = await AppDatabase.initDB();
+    final result = await db.query(
+      'topic',
+      where: 'title LIKE ?',
+      whereArgs: ['%$title%'],
+    ); //keyword sirve para las palabras clave que digira el usuario
+
+    setState(() {
+      topics = result.map((e) => Topic.fromMap(e)).toList();
+    });
+  }
+
   Future<void> _deleteTOpic(int id) async {
     final db = await AppDatabase.initDB();
     await db.delete('topic', where: 'id = ?', whereArgs: [id]);
@@ -55,7 +76,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
     final titlectrl = TextEditingController(text: topic.title);
     final conentctrl = TextEditingController(text: topic.content);
     final datectrl = TextEditingController(text: topic.date);
-    final entrada = datectrl.text.trim();
+    final entradadate = datectrl.text.trim();
 
     bool iscompleted = topic.state;
 
@@ -169,9 +190,27 @@ class _TopicListScreenState extends State<TopicListScreen> {
           children: [
             Row(
               children: [
+                DropdownButton(
+                  //dropdown button sirve para mostrar varias opciones desplegables para eligir
+                  value: dropdownbuttonvalue,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownbuttonvalue = value!;
+                    });
+                  },
+                  items:
+                      listoptions.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                ),
                 Expanded(
                   child: TextField(
-                    controller: datecontroller,
+                    controller: searchdatecontroller,
                     decoration: InputDecoration(label: Text("Buscar leccion")),
                   ),
                 ),
@@ -179,31 +218,40 @@ class _TopicListScreenState extends State<TopicListScreen> {
                 FilledButton.icon(
                   onPressed: () {
                     final entrada =
-                        datecontroller.text
+                        searchdatecontroller.text
                             .trim(); // Tomamos lo que escribió el usuario
-                    try {
-                      // Si el campo está vacío, mostramos un mensaje
-                      if (entrada.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Esta vacio")),
-                        );
-                      } else {
-                        // Convertimos la fecha escrita (por ejemplo "29/07/2006") al formato ISO ("2006-07-29")
-                        // Esto es importante porque la base de datos guarda las fechas en ese formato
+
+                    // Si el campo está vacío, mostramos un mensaje
+                    if (entrada.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Esta vacio")),
+                      );
+                      return;
+                    }
+
+                    if (dropdownbuttonvalue == 'Fecha') {
+                      //si el valor principal que se declaro en la cclase
+                      try {
+                        //es fecha buscara por fecha en dado caso cambie de estado a titulo y buscara por ese mismo
                         final fechaIso = DateFormat(
                           'yyyy-MM-dd',
                         ).format(DateFormat('dd/MM/yyyy').parse(entrada));
-
-                        // función que busca temas por esa fecha
                         _searchbydate(fechaIso);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                          ),
+                        );
                       }
-                    } catch (e) {
-                      //usuario escribió mal la fecha, mostramos un mensaje de error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
-                        ),
-                      );
+                    } else if (dropdownbuttonvalue == 'Titulo') {
+                      try {
+                        _searchbywords(entrada);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Texto no encontrado")),
+                        );
+                      }
                     }
                   },
                   icon: const Icon(Icons.search),
