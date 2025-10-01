@@ -6,10 +6,8 @@ import 'routing/AppRouter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+ 
 
-  // 🔥 Eliminar base local para forzar recreación
-  final pathdb = await getDatabasesPath();
-  final path = join(pathdb, 'skillsync.db');
   runApp(const SkillSyncApp());
 }
 

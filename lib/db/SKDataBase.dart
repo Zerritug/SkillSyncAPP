@@ -29,6 +29,23 @@ class AppDatabase {
         ''');
 
         await db.execute('''
+          CREATE TABLE reminder (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            message TEXT,
+            time TEXT,
+            date TEXT,
+            isEnabled BOOLEAN
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE phrase (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            text TEXT
+          )
+        ''');
+
+        await db.execute('''
           CREATE TABLE lesson (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
@@ -52,13 +69,7 @@ class AppDatabase {
           )
         ''');
 
-        await db.execute('''
-          CREATE TABLE reminder (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            message TEXT,
-            date TEXT
-          )
-        ''');
+
 
         await db.execute('''
           CREATE TABLE stats (
@@ -86,6 +97,7 @@ class AppDatabase {
             state BOOLEAN
           )
         ''');
+     
 
         // Reforzar definición de topic por si faltaba
         await db.execute('''

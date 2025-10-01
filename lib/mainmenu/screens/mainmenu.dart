@@ -4,6 +4,7 @@ import 'package:skillsync/core/constants.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
+import 'package:skillsync/db/Models/Phrase.dart';
 
 import 'package:skillsync/db/SKDataBase.dart';
 import 'package:skillsync/db/Models/User.dart';
@@ -30,6 +31,21 @@ class MainMenuScreenState extends State<MainMenuScreen> {
       });
     }
   }
+//phrase 
+
+List<Phrase> Phrases = [];
+
+Future<void> _loadphrases() async {
+  final db = await AppDatabase.initDB();
+  final result = await db.query('phrase');
+
+  if (result.isNotEmpty) {
+    setState(() {
+      Phrases = result.map((e) => Phrase.fromMap(e)).toList();
+    });
+  }
+}
+
   //objetive
 
   List<weeklyobjective> Objetives = [];
