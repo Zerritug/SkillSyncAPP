@@ -31,11 +31,12 @@ class MainMenuScreenState extends State<MainMenuScreen> {
       });
     }
   }
-//phrase 
 
+//frases 
 List<Phrase> Phrases = [];
 
-Future<void> _loadphrases() async {
+  //cargar frases
+ Future<void> _loadphrases() async {
   final db = await AppDatabase.initDB();
   final result = await db.query('phrase');
 
@@ -45,6 +46,9 @@ Future<void> _loadphrases() async {
     });
   }
 }
+
+
+
 
   //objetive
 
@@ -177,6 +181,7 @@ Future<void> _loadphrases() async {
     //cargar usuario y objetivo
     _loaduserdata();
     _loadobjetives();
+    _loadphrases();
   }
 
   @override
@@ -225,26 +230,21 @@ Future<void> _loadphrases() async {
               // Botones superiores
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      context.go('/stats');
+                      context.go('/phrases');
                     },
                     style: ButtonStyles.elevatedbutton1,
                     child: const Text(
-                      'Estadísticas',
+                      'Frases',
                       style: AppTextStyles.button1,
-                    ),
+                    ),  
                   ),
                   const SizedBox(width: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.go('/mindmap');
-                    },
-                    style: ButtonStyles.elevatedbutton1,
-                    child: const Text('MindMap', style: AppTextStyles.button1),
-                  ),
+                
                 ],
               ),
 
@@ -264,10 +264,14 @@ Future<void> _loadphrases() async {
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        "Work In Progress",
+                      child:Column(
+                        children: [
+                          Text(
+                        Phrase != null ? '${Phrase!.text}',
                         style: AppTextStyles.greeting2,
                       ),
+                      Text ('')
+                      ],)
                     ),
                   ],
                 ),
