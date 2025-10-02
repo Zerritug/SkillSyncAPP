@@ -8,7 +8,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 5,
+      version: 6,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE user (
@@ -69,8 +69,6 @@ class AppDatabase {
           )
         ''');
 
-
-
         await db.execute('''
           CREATE TABLE stats (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,7 +95,13 @@ class AppDatabase {
             state BOOLEAN
           )
         ''');
-     
+
+        await db.execute('''
+  CREATE TABLE IF NOT EXISTS phrase (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    text TEXT
+  )
+''');
 
         // Reforzar definición de topic por si faltaba
         await db.execute('''

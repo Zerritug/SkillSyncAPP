@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:skillsync/core/constants.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/db/Models/Phrase.dart';
-
+import 'package:skillsync/features/Providers/PhraseProvider.dart';
 import 'package:skillsync/db/SKDataBase.dart';
 import 'package:skillsync/db/Models/User.dart';
 import 'package:skillsync/db/Models/Objetive.dart';
@@ -31,24 +32,6 @@ class MainMenuScreenState extends State<MainMenuScreen> {
       });
     }
   }
-
-//frases 
-List<Phrase> Phrases = [];
-
-  //cargar frases
- Future<void> _loadphrases() async {
-  final db = await AppDatabase.initDB();
-  final result = await db.query('phrase');
-
-  if (result.isNotEmpty) {
-    setState(() {
-      Phrases = result.map((e) => Phrase.fromMap(e)).toList();
-    });
-  }
-}
-
-
-
 
   //objetive
 
@@ -181,7 +164,6 @@ List<Phrase> Phrases = [];
     //cargar usuario y objetivo
     _loaduserdata();
     _loadobjetives();
-    _loadphrases();
   }
 
   @override
@@ -238,43 +220,47 @@ List<Phrase> Phrases = [];
                       context.go('/phrases');
                     },
                     style: ButtonStyles.elevatedbutton1,
-                    child: const Text(
-                      'Frases',
-                      style: AppTextStyles.button1,
-                    ),  
+                    child: const Text('Frases', style: AppTextStyles.button1),
                   ),
                   const SizedBox(width: 40),
-                
                 ],
               ),
 
               const SizedBox(height: 40),
 
-              // Contenedor Work In Progress
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.tertiary,
-                  border: Border.all(width: 0.5, color: AppColors.sixtiary),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                width: 350,
-                height: 200,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child:Column(
-                        children: [
-                          Text(
-                        Phrase != null ? '${Phrase!.text}',
-                        style: AppTextStyles.greeting2,
-                      ),
-                      Text ('')
-                      ],)
+              // Contenedor Frases
+              Consumer<PhraseProvider>(
+                builder: (context, phraseProvider, _) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.tertiary,
+                      border: Border.all(width: 0.5, color: AppColors.sixtiary),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ],
-                ),
+                    width: 350,
+                    height: 200,
+
+                    child: ListView.builder(
+                      itemCount: phraseProvider.phrases.length,
+                      itemBuilder: (_, index) {
+                        final phrase = phraseProvider.phrases[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [Text(phrase.text)],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(height: 20),
