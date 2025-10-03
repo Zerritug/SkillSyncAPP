@@ -4,7 +4,7 @@ import 'package:skillsync/features/AddLesson/Addlesson.dart';
 import 'package:skillsync/features/AddTopic/AddTopics.dart';
 import 'package:skillsync/features/phrases/Phrases.dart';
 import 'package:skillsync/features/viewLessons/ViewLessons.dart';
-
+import 'package:skillsync/features/Reminders/Reminders.dart';
 import '../welcomescreen/screens/welcomescreen.dart';
 import '../mainmenu/screens/mainmenu.dart';
 import '../features/mindmap/screens/mindmap.dart';
@@ -52,6 +52,11 @@ final GoRouter appRouter = GoRouter(
       name: RouteNames.phrases,
       path: '/phrases',
       builder: (context, state) => FrasesMotivacionales(),
+    ),
+    GoRoute(
+      name: RouteNames.reminders,
+      path: '/reminders',
+      builder: (context, state) => ReminderScreen(),
     ),
   ],
 );

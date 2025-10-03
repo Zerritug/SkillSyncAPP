@@ -1,10 +1,9 @@
 class Reminder {
-  final int? id; 
+  final int? id;
   final String message;
   final String date;
   final String time;
   final bool isenabled;
-
 
   Reminder({
     this.id,
@@ -14,23 +13,23 @@ class Reminder {
     required this.isenabled,
   });
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'message': message,
       'date': date,
       'time': time,
-      'isenabled': isenabled,
+      'isenabled': isenabled ? 1 : 0,
     };
   }
 
   factory Reminder.fromMap(Map<String, dynamic> map) {
-    return Reminder (
+    return Reminder(
       id: map['id'],
-      message: map['message'],
-      date: map['date'],
-      time: map['time'],
-      isenabled: map['isenabled'],
+      message: map['message'] ?? '',
+      date: map['date'] ?? '',
+      time: map['time'] ?? '',
+      isenabled: (map['isenabled'] ?? 0) == 1,
     );
   }
 }

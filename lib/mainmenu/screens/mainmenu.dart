@@ -223,6 +223,16 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     child: const Text('Frases', style: AppTextStyles.button1),
                   ),
                   const SizedBox(width: 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/reminders');
+                    },
+                    style: ButtonStyles.elevatedbutton1,
+                    child: const Text(
+                      'Reminders',
+                      style: AppTextStyles.button1,
+                    ),
+                  ),
                 ],
               ),
 

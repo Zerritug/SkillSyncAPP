@@ -7,4 +7,6 @@ class RouteNames {
   static const addtopic = 'addTopics';
   static const viewtopics = 'viewTopics';
   static const phrases = 'phrases';
+  static const reminders = 'reminders';
+  static const settings = 'settings';
 }

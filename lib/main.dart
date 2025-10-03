@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skillsync/features/Providers/PhraseProvider.dart';
+import 'package:skillsync/features/Providers/ReminderProvider.dart';
 import 'routing/AppRouter.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+void main() {
   runApp(
-    ChangeNotifierProvider(
-      create:
-          (_) => PhraseProvider()..loadPhrases(), // cascade operator correcto
-      child: const SkillSyncApp(), // el child es tu app
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PhraseProvider()..loadPhrases()),
+        ChangeNotifierProvider(
+          create: (_) => ReminderProvider()..loadReminders(),
+        ),
+        // Puedes seguir agregando más providers aquí
+      ],
+      child: const SkillSyncApp(),
     ),
   );
 }
