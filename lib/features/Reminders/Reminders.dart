@@ -8,6 +8,7 @@ import 'package:skillsync/db/Models/Reminder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/services/NotificationService.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart'; // IMPORTANTE para DateFormat
 
 class ReminderScreen extends StatelessWidget {
   const ReminderScreen({super.key});
@@ -26,7 +27,7 @@ class ReminderScreen extends StatelessWidget {
         'Esta es una notificación de prueba 🎉',
         const NotificationDetails(
           android: AndroidNotificationDetails(
-            'reminder_channel', // Asegúrate de que este canal exista
+            'reminder_channel',
             'Pruebas',
             channelDescription: 'Canal para pruebas simples',
             importance: Importance.high,
@@ -45,64 +46,91 @@ class ReminderScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 final messageController = TextEditingController();
-                final timeController = TextEditingController();
                 final dateController = TextEditingController();
+                final timeController = TextEditingController();
 
                 await showDialog(
                   context: context,
-                  builder:
-                      (_) => AlertDialog(
-                        title: const Text("Nuevo recordatorio"),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextField(
-                              controller: messageController,
-                              decoration: const InputDecoration(
-                                labelText: "Mensaje",
-                              ),
-                            ),
-                            TextField(
-                              controller: dateController,
-                              decoration: const InputDecoration(
-                                labelText: "Fecha",
-                              ),
-                            ),
-                            TextField(
-                              controller: timeController,
-                              decoration: const InputDecoration(
-                                labelText: "Hora",
-                              ),
-                            ),
-                          ],
+                  builder: (_) => AlertDialog(
+                    title: const Text("Nuevo recordatorio"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: messageController,
+                          decoration:
+                              const InputDecoration(labelText: "Mensaje"),
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              if (messageController.text.isNotEmpty) {
-                                final reminder = Reminder(
-                                  message: messageController.text,
-                                  date: dateController.text,
-                                  time: timeController.text,
-                                  isEnabled: true,
-                                );
-                                reminderProvider.addReminder(reminder);
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: const Text("Guardar"),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text("Cancelar"),
-                          ),
-                        ],
+                        TextField(
+                          controller: dateController,
+                          decoration: const InputDecoration(
+                              labelText: "Fecha (dd-MM-yyyy)"),
+                        ),
+                        TextField(
+                          controller: timeController,
+                          decoration:
+                              const InputDecoration(labelText: "Hora (HH:mm)"),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () async {
+                          final message = messageController.text.trim();
+                          final date = dateController.text.trim();
+                          final time = timeController.text.trim();
+
+                          if (message.isEmpty || date.isEmpty || time.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Por favor, llena todos los campos')),
+                            );
+                            return;
+                          }
+
+                          try {
+                            final rawDate = date.replaceAll('/', '-');
+                            final rawTime = time.length == 5 ? '$time:00' : time;
+                            final fullString = '$rawDate $rawTime';
+
+                            final dateTime =
+                                DateFormat("dd-MM-yyyy HH:mm:ss").parse(fullString);
+
+                            if (dateTime.isBefore(DateTime.now())) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('La fecha y hora no pueden ser pasadas')),
+                              );
+                              return;
+                            }
+
+                            final reminder = Reminder(
+                              message: message,
+                              date: rawDate,
+                              time: time,
+                              isEnabled: true,
+                            );
+
+                            await reminderProvider.addReminder(reminder);
+                            Navigator.pop(context);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error al parsear fecha y hora')),
+                            );
+                          }
+                        },
+                        child: const Text("Guardar"),
                       ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("Cancelar"),
+                      ),
+                    ],
+                  ),
                 );
               },
               style: ButtonStyles.elevatedbutton1,
               child: Text("Agregar", style: AppTextStyles.button3),
             ),
+            const SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
                 color: AppColors.tertiary,
@@ -126,21 +154,14 @@ class ReminderScreen extends StatelessWidget {
                           Switch(
                             value: reminder.isEnabled,
                             onChanged: (val) async {
-                              await reminderProvider.toggleReminder(
-                                reminder.id!,
-                                val,
-                              );
+                              await reminderProvider.toggleReminder(reminder.id!, val);
                               print(
-                                'Notificación ${val ? "activada" : "cancelada"} para ${reminder.message}',
-                              ); //prueba para feedback en consola
+                                  'Notificación ${val ? "activada" : "cancelada"} para ${reminder.message}');
                             },
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
-                            onPressed:
-                                () => reminderProvider.deleteReminder(
-                                  reminder.id!,
-                                ),
+                            onPressed: () => reminderProvider.deleteReminder(reminder.id!),
                           ),
                         ],
                       ),
@@ -170,13 +191,12 @@ class ReminderScreen extends StatelessWidget {
                   print('Error al programar notificación: $e');
                 }
               },
-              child: Text('Probar notificación'),
+              child: const Text('Probar notificación'),
             ),
             ElevatedButton(
               onPressed: mostrarNotificacionSimple,
-              child: Text('Probar notificación'),
+              child: const Text('Probar notificación'),
             ),
-            //pruebas para la notificacion de la app
           ],
         ),
       ),

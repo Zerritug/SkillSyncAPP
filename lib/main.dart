@@ -18,9 +18,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
-  tz.setLocalLocation(
-    tz.getLocation('America/Bogota'),
-  ); //prueba de hora y fecha local de momento colombia
+ 
   await NotificationService.init();
 
   const AndroidInitializationSettings androidSettings =
