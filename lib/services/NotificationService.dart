@@ -19,6 +19,13 @@ class NotificationService {
       description: 'Scheduled reminders',
       importance: Importance.high,
     );
+    const AndroidNotificationChannel scheduledChannel =
+        AndroidNotificationChannel(
+          'scheduled_channel',
+          'Scheduled Reminders',
+          description: 'Canal para notificaciones programadas',
+          importance: Importance.high,
+        );
 
     final androidPlugin =
         _plugin
@@ -27,6 +34,9 @@ class NotificationService {
             >();
 
     await androidPlugin?.createNotificationChannel(channel);
+    await androidPlugin?.createNotificationChannel(
+      scheduledChannel,
+    ); // ← este faltaba
   }
 
   /// not y fecha exacta
@@ -46,9 +56,9 @@ class NotificationService {
       scheduled,
       const NotificationDetails(
         android: AndroidNotificationDetails(
-          'reminder_channel',
-          'Reminders',
-          channelDescription: 'Scheduled reminders',
+          'scheduled_channel',
+          'Scheduled Reminders',
+          channelDescription: 'Canal para notificaciones programadas',
           importance: Importance.high,
           priority: Priority.high,
         ),

@@ -16,10 +16,11 @@ class ReminderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addReminder(Reminder reminder) async {
+  Future<int?> addReminder(Reminder reminder) async {
     final db = await AppDatabase.initDB();
-    await db.insert('reminder', reminder.toMap());
+    final id = await db.insert('reminder', reminder.toMap());
     await loadReminders();
+    return id;
   }
 
   Future<void> deleteReminder(int id) async {
@@ -39,41 +40,54 @@ class ReminderProvider extends ChangeNotifier {
 
     final reminder = _reminders.firstWhere((r) => r.id == id);
 
-    // Usa el mismo formato exacto con el que guardas la fecha
-    final dateFormat = DateFormat(
-      "dd-MM-yyyy HH:mm:ss",
-    ); // O dd/MM/yyyy si así guardas
+    try {
+      // 🧭 Normalizamos la fecha
+      final rawDate = reminder.date.trim().replaceAll('/', '-');
 
-    // Normaliza fecha y hora
-    final rawDate = reminder.date.replaceAll('/', '-');
-    final rawTime =
-        reminder.time.length == 5 ? '${reminder.time}:00' : reminder.time;
+      // 🧭 Normalizamos la hora
+      String cleanedTime = reminder.time.trim();
 
-    final fullString = '$rawDate $rawTime';
-    print('🧭 Parseando fecha completa: $fullString');
+      // El usuario podría escribir “4:6” → lo convertimos a “04:06:00”
+      final timeParts = cleanedTime.split(':');
+      String hour = timeParts[0].padLeft(2, '0');
+      String minute =
+          timeParts.length > 1 ? timeParts[1].padLeft(2, '0') : '00';
+      final rawTime = '$hour:$minute:00';
 
-    final dateTime = dateFormat.parse(fullString);
-    final scheduledDate = tz.TZDateTime.from(dateTime, tz.local);
+      // 🧭 Construimos la cadena completa
+      final fullString = '$rawDate $rawTime';
+      print('🧭 Parseando fecha completa: "$fullString"');
 
-    print('🕒 Ahora: ${tz.TZDateTime.now(tz.local)}');
-    print('🗓 Programado: $scheduledDate');
+      // 📌 Intentamos parsear
+      final dateFormat = DateFormat("dd-MM-yyyy HH:mm:ss");
+      final dateTime = dateFormat.parseStrict(fullString);
+      final scheduledDate = tz.TZDateTime.from(
+        dateTime,
+        tz.local,
+      ).add(Duration(seconds: 10));
 
-    if (scheduledDate.isBefore(tz.TZDateTime.now(tz.local))) {
-      print('⚠️ Fecha inválida: el recordatorio está en el pasado');
-      return;
-    }
+      print('🕒 Ahora: ${tz.TZDateTime.now(tz.local)}');
+      print('🗓 Programado: $scheduledDate');
 
-    if (isEnabled) {
-      await NotificationService.scheduleReminder(
-        id: id,
-        title: 'Recordatorio',
-        body: reminder.message,
-        dateTime: scheduledDate,
-      );
-      print('✅ Notificación programada para $scheduledDate');
-    } else {
-      await NotificationService.cancelReminder(id);
-      print('❌ Notificación cancelada para id $id');
+      if (scheduledDate.isBefore(tz.TZDateTime.now(tz.local))) {
+        print('⚠️ Fecha inválida: el recordatorio está en el pasado');
+        return;
+      }
+
+      if (isEnabled) {
+        print('✅ Programando notificación para $scheduledDate');
+        await NotificationService.scheduleReminder(
+          id: id,
+          title: 'Recordatorio',
+          body: reminder.message,
+          dateTime: scheduledDate,
+        );
+      } else {
+        print('❌ Cancelando notificación para id $id');
+        await NotificationService.cancelReminder(id);
+      }
+    } catch (e) {
+      print('❌ Error al parsear fecha y hora del reminder: $e');
     }
 
     await loadReminders();

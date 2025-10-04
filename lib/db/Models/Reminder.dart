@@ -19,7 +19,7 @@ class Reminder {
       'message': message,
       'date': date,
       'time': time,
-      'isenabled': isEnabled ? 1 : 0,
+      'isEnabled': isEnabled ? 1 : 0,
     };
   }
 

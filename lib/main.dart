@@ -18,18 +18,16 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
- 
-  await NotificationService.init();
 
-  const AndroidInitializationSettings androidSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const initSettings = InitializationSettings(android: androidSettings);
 
-  const InitializationSettings initSettings = InitializationSettings(
-    android: androidSettings,
-  );
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
 
+  await NotificationService.init(); // ← si usas lógica adicional ahí
   await NotificationService.solicitarPermisoNotificacion();
   await NotificationService.solicitarPermisoExactAlarms();
+
   runApp(
     MultiProvider(
       providers: [
