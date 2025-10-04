@@ -3,14 +3,14 @@ class Reminder {
   final String message;
   final String date;
   final String time;
-  final bool isenabled;
+  final bool isEnabled;
 
   Reminder({
     this.id,
     required this.message,
     required this.date,
     required this.time,
-    required this.isenabled,
+    required this.isEnabled,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,7 +19,7 @@ class Reminder {
       'message': message,
       'date': date,
       'time': time,
-      'isenabled': isenabled ? 1 : 0,
+      'isenabled': isEnabled ? 1 : 0,
     };
   }
 
@@ -29,7 +29,7 @@ class Reminder {
       message: map['message'] ?? '',
       date: map['date'] ?? '',
       time: map['time'] ?? '',
-      isenabled: (map['isenabled'] ?? 0) == 1,
+      isEnabled: (map['isEnabled'] ?? 0) == 1,
     );
   }
 }

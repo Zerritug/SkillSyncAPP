@@ -6,6 +6,8 @@ import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/features/Providers/ReminderProvider.dart';
 import 'package:skillsync/db/Models/Reminder.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skillsync/services/NotificationService.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ReminderScreen extends StatelessWidget {
   const ReminderScreen({super.key});
@@ -14,6 +16,25 @@ class ReminderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final reminderProvider = context.watch<ReminderProvider>();
     final reminders = reminderProvider.reminders;
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    void mostrarNotificacionSimple() async {
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        '¡Hola Runny!',
+        'Esta es una notificación de prueba 🎉',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'reminder_channel', // Asegúrate de que este canal exista
+            'Pruebas',
+            channelDescription: 'Canal para pruebas simples',
+            importance: Importance.high,
+            priority: Priority.high,
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Recordatorios')),
@@ -63,7 +84,7 @@ class ReminderScreen extends StatelessWidget {
                                   message: messageController.text,
                                   date: dateController.text,
                                   time: timeController.text,
-                                  isenabled: true,
+                                  isEnabled: true,
                                 );
                                 reminderProvider.addReminder(reminder);
                                 Navigator.pop(context);
@@ -103,12 +124,16 @@ class ReminderScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Switch(
-                            value: reminder.isenabled,
-                            onChanged:
-                                (val) => reminderProvider.toggleReminder(
-                                  reminder.id!,
-                                  val,
-                                ),
+                            value: reminder.isEnabled,
+                            onChanged: (val) async {
+                              await reminderProvider.toggleReminder(
+                                reminder.id!,
+                                val,
+                              );
+                              print(
+                                'Notificación ${val ? "activada" : "cancelada"} para ${reminder.message}',
+                              ); //prueba para feedback en consola
+                            },
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
@@ -130,6 +155,28 @@ class ReminderScreen extends StatelessWidget {
               style: ButtonStyles.elevatedbutton3,
               child: const Text('Volver', style: AppTextStyles.button3),
             ),
+            ElevatedButton(
+              onPressed: () async {
+                print('Botón presionado');
+                try {
+                  await NotificationService.scheduleReminder(
+                    id: 999,
+                    title: 'Prueba SkillSync',
+                    body: 'Esta es una notificación de prueba',
+                    dateTime: DateTime.now().add(Duration(seconds: 5)),
+                  );
+                  print('Notificación programada');
+                } catch (e) {
+                  print('Error al programar notificación: $e');
+                }
+              },
+              child: Text('Probar notificación'),
+            ),
+            ElevatedButton(
+              onPressed: mostrarNotificacionSimple,
+              child: Text('Probar notificación'),
+            ),
+            //pruebas para la notificacion de la app
           ],
         ),
       ),
