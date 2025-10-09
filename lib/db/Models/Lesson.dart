@@ -1,5 +1,5 @@
 class Lesson {
-  final int? id;
+  final int? id; // el ? es para indicar que puede ser nulo
   final String title;
   final String content;
   final String date;
@@ -22,7 +22,7 @@ class Lesson {
       'title': title,
       'content': content,
       'date': date,
-      'state': state ? 1 : 0,
+      'state': state ? 1 : 0, //puede ser verdadero o falso
       'user_id': userId,
       'category_id': categoryId,
     };

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:skillsync/core/constants.dart';
+
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
@@ -19,13 +19,12 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class MainMenuScreenState extends State<MainMenuScreen> {
-  // user
   User? user;
-  //cargar usuario
+  List<weeklyobjective> Objetives = [];
+
   Future<void> _loaduserdata() async {
     final db = await AppDatabase.initDB();
     final result = await db.query('user');
-
     if (result.isNotEmpty) {
       setState(() {
         user = User.fromMap(result.first);
@@ -33,11 +32,6 @@ class MainMenuScreenState extends State<MainMenuScreen> {
     }
   }
 
-  //objetive
-
-  List<weeklyobjective> Objetives = [];
-
-  //funcion agregar objetivo
   Future<void> _addObjetive() async {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
@@ -48,9 +42,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
       context: context,
       builder: (_) {
         return StatefulBuilder(
-          //se agrega Statefulbuilder por que oermite al chebox actualizar su estado sin que crashe
           builder: (context, setDialogState) {
-            //setdialog state para poder cambiar el estado del chebox actua como un setstate
             return AlertDialog(
               title: const Text('Agregar Objetivo'),
               content: SingleChildScrollView(
@@ -111,7 +103,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     dateController.clear();
 
                     if (context.mounted) {
-                      Navigator.of(context).pop(); // Cierra el diálogo
+                      Navigator.of(context).pop();
                       _loadobjetives();
 
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -124,11 +116,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   child: const Text("Guardar"),
                 ),
                 TextButton(
-                  onPressed:
-                      () =>
-                          Navigator.of(
-                            context,
-                          ).pop(), //cierra automaticamente luego de guardarla
+                  onPressed: () => Navigator.of(context).pop(),
                   child: const Text("Cancelar"),
                 ),
               ],
@@ -161,13 +149,14 @@ class MainMenuScreenState extends State<MainMenuScreen> {
   @override
   void initState() {
     super.initState();
-    //cargar usuario y objetivo
     _loaduserdata();
     _loadobjetives();
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -175,70 +164,55 @@ class MainMenuScreenState extends State<MainMenuScreen> {
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors:
-                  AppColors
-                      .appbargradient, //usa lista de colores en app colors.
+              colors: AppColors.appbargradient,
             ),
           ),
         ),
         title: Padding(
           padding: LayoutStyles.cardPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                user != null
-                    ? 'Bienvenido, ${user!.name}'
-                    : 'Cargando usuario...',
-                style: const TextStyle(fontSize: 20, color: Colors.white),
-              ),
-              //estilo de texto
-              Text(
-                'Nivel de usuario: $level',
-                style: AppTextStyles.userlevel,
-              ), //estilo de texto
-            ],
+          child: Text(
+            user != null ? 'Bienvenido, ${user!.name}' : 'Cargando usuario...',
+            style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
       ),
-
       backgroundColor: AppColors.tertiary,
       body: SingleChildScrollView(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
           child: Column(
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
 
-              // Botones superiores
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                crossAxisAlignment: CrossAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12,
+                runSpacing: 12,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      context.go('/phrases');
-                    },
+                    onPressed: () => context.go('/phrases'),
                     style: ButtonStyles.elevatedbutton1,
                     child: const Text('Frases', style: AppTextStyles.button1),
                   ),
-                  const SizedBox(width: 40),
                   ElevatedButton(
-                    onPressed: () {
-                      context.go('/reminders');
-                    },
+                    onPressed: () => context.go('/reminders'),
                     style: ButtonStyles.elevatedbutton1,
                     child: const Text(
                       'Reminders',
                       style: AppTextStyles.button1,
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () => context.go('/mindmap'),
+                    style: ButtonStyles.elevatedbutton1,
+                    child: const Text('MindMaps', style: AppTextStyles.button1),
+                  ),
                 ],
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
 
-              // Contenedor Frases
+              // Frases
               Consumer<PhraseProvider>(
                 builder: (context, phraseProvider, _) {
                   return Container(
@@ -247,24 +221,20 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                       border: Border.all(width: 0.5, color: AppColors.sixtiary),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    width: 350,
+                    width: screenWidth * 0.9,
                     height: 200,
-
                     child: ListView.builder(
                       itemCount: phraseProvider.phrases.length,
                       itemBuilder: (_, index) {
                         final phrase = phraseProvider.phrases[index];
                         return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 8,
+                          ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 16,
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [Text(phrase.text)],
-                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: Text(phrase.text),
                           ),
                         );
                       },
@@ -275,27 +245,23 @@ class MainMenuScreenState extends State<MainMenuScreen> {
 
               const SizedBox(height: 20),
               const Text("Acciones Rápidas", style: AppTextStyles.titles),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
 
-              // Botones de acción
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12,
+                runSpacing: 12,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      context.go('/addLessons');
-                    },
+                    onPressed: () => context.go('/addLessons'),
                     style: ButtonStyles.elevatedbutton1,
                     child: const Text(
                       'Añadir Lecciones',
                       style: AppTextStyles.button1,
                     ),
                   ),
-                  const SizedBox(width: 40),
                   ElevatedButton(
-                    onPressed: () {
-                      context.go('/addTopics');
-                    },
+                    onPressed: () => context.go('/addTopics'),
                     style: ButtonStyles.elevatedbutton1,
                     child: const Text(
                       'Añadir Tema',
@@ -307,8 +273,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
 
               const SizedBox(height: 20),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12,
+                runSpacing: 12,
                 children: [
                   ElevatedButton(
                     onPressed: () => context.go('/viewLessons'),
@@ -318,11 +286,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                       style: AppTextStyles.button2,
                     ),
                   ),
-                  const SizedBox(width: 40),
                   ElevatedButton(
-                    onPressed: () {
-                      context.go('/viewTopics');
-                    },
+                    onPressed: () => context.go('/viewTopics'),
                     style: ButtonStyles.elevatedbutton2,
                     child: const Text(
                       'Ver Temas',
@@ -333,110 +298,84 @@ class MainMenuScreenState extends State<MainMenuScreen> {
               ),
 
               const SizedBox(height: 30),
-
-              // Objetivos Diarios
               const Text("Objetivos Semanales", style: AppTextStyles.titles),
-
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
 
-                children: [
-                  ElevatedButton(
-                    onPressed: _addObjetive,
-                    style: ButtonStyles.elevatedbutton1,
-                    child: Text("Agregar", style: AppTextStyles.button3),
-                  ),
-                ],
+              ElevatedButton(
+                onPressed: _addObjetive,
+                style: ButtonStyles.elevatedbutton1,
+                child: Text("Agregar", style: AppTextStyles.button3),
               ),
 
               const SizedBox(height: 20),
+
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.tertiary,
                   border: Border.all(width: 0.5, color: AppColors.sixtiary),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                width: 300,
+                width: screenWidth * 0.9,
                 height: 300,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: ListView.builder(
-                    itemCount: Objetives.length,
-                    itemBuilder: (_, index) {
-                      final objetive = Objetives[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 16,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            objetive.title,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          objetive.date,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: Objetives.length,
+                  itemBuilder: (_, index) {
+                    final objetive = Objetives[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    objetive.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    const SizedBox(height: 8),
-                                    Text(objetive.description),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Estado: ${objetive.state ? "Completado" : "Pendiente"}',
-                                          style: TextStyle(
-                                            color:
-                                                objetive.state
-                                                    ? Colors.green
-                                                    : Colors.orange,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          onPressed:
-                                              () =>
-                                                  _deleteobjetive(objetive.id!),
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                                Text(
+                                  objetive.date,
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(objetive.description),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Estado: ${objetive.state ? "Completado" : "Pendiente"}',
+                                  style: TextStyle(
+                                    color:
+                                        objetive.state
+                                            ? Colors.green
+                                            : Colors.orange,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed:
+                                      () => _deleteobjetive(objetive.id!),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
 

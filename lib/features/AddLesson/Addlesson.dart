@@ -62,7 +62,7 @@ class _LessonScreen extends State<LessonScreen> {
 
       'category_id': int.tryParse(categoryIdController.text) ?? 0,
     });
-    titleController.clear();
+    titleController.clear(); //limpia el campo para poder agregar uno nuevo
     contentController.clear();
     dateController.clear();
 

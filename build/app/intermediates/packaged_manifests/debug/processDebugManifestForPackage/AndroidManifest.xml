@@ -13,7 +13,7 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATION" /> <!-- delcara el nombre para los permisos que se pefdiran en este caso notificaciones y alarmas -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <!--
  Required to query activities that can process text, see:

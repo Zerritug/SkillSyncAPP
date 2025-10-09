@@ -10,6 +10,9 @@ import '../mainmenu/screens/mainmenu.dart';
 import '../features/mindmap/screens/mindmap.dart';
 import 'route_names.dart';
 
+//go router se implemento para la navegacion de la aplicacion, name para el nombre de la pantalla el path
+// que se declara en route_names.dart para tener un tipo de url al que dirigirse y el builder es la pantalla
+
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
   routes: [

@@ -1,5 +1,5 @@
 class weeklyobjective {
-  final int? id;
+  final int? id; //puede ser nulo
   final String title;
   final String description;
   final String date;

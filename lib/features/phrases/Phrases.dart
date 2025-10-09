@@ -13,7 +13,9 @@ class FrasesMotivacionales extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final phraseProvider = context.watch<PhraseProvider>();
-    final phrases = phraseProvider.phrases;
+    final phrases =
+        phraseProvider
+            .phrases; //provider, este sirve como nueva variable para delcarar las listas que se consumen desde el provider
     return Scaffold(
       appBar: AppBar(title: const Text('Frases Motivacionales')),
       body: Center(

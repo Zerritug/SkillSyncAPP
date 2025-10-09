@@ -36,7 +36,7 @@ class _TopicScreen extends State<TopicScreen> {
       'date': dateController.text,
       'state': isCompleted ? 1 : 0,
     });
-    titleController.clear();
+    titleController.clear(); //limpia el campo para poder agregar uno nuevo
     contentController.clear();
     dateController.clear();
 

@@ -1,5 +1,5 @@
 class Topic {
-  final int? id;
+  final int? id; //puede ser nulo
   final String title;
   final String content;
   final String date;

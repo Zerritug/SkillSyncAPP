@@ -1,5 +1,5 @@
 class Reminder {
-  final int? id;
+  final int? id; //puede ser nulo
   final String message;
   final String date;
   final String time;

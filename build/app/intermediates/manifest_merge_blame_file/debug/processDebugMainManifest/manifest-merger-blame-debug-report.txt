@@ -15,7 +15,7 @@
 15    <uses-permission android:name="android.permission.INTERNET" />
 15-->/home/zerritug/SkillSync/skillsync/android/app/src/debug/AndroidManifest.xml:6:5-66
 15-->/home/zerritug/SkillSync/skillsync/android/app/src/debug/AndroidManifest.xml:6:22-64
-16    <uses-permission android:name="android.permission.POST_NOTIFICATION" />
+16    <uses-permission android:name="android.permission.POST_NOTIFICATION" /> <!-- delcara el nombre para los permisos que se pefdiran en este caso notificaciones y alarmas -->
 16-->/home/zerritug/SkillSync/skillsync/android/app/src/main/AndroidManifest.xml:2:2-72
 16-->/home/zerritug/SkillSync/skillsync/android/app/src/main/AndroidManifest.xml:2:19-70
 17    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />

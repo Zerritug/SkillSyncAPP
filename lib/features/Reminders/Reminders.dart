@@ -18,7 +18,11 @@ class ReminderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reminderProvider = context.watch<ReminderProvider>();
+    final reminderProvider =
+        context
+            .watch<
+              ReminderProvider
+            >(); //espera el contenido funciones,controladores etc delprovider de reminders
     final reminders = reminderProvider.reminders;
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
@@ -38,7 +42,7 @@ class ReminderScreen extends StatelessWidget {
           ),
         ),
       );
-    }
+    } // canal prueba, se hizo para verificar errores dentro del codigo y saber que tipo de problema sugeria
 
     return Scaffold(
       appBar: AppBar(title: const Text('Recordatorios')),
@@ -48,9 +52,7 @@ class ReminderScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () async {
-                // ... tu lógica del diálogo permanece igual
-              },
+              onPressed: () async {},
               style: ButtonStyles.elevatedbutton1,
               child: Text("Agregar", style: AppTextStyles.button3),
             ),

@@ -93,44 +93,49 @@ class _LessonListScreenState extends State<LessonListScreen> {
       builder:
           (_) => AlertDialog(
             title: const Text("Editar Leccion"),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: titlectrl,
-                    decoration: const InputDecoration(
-                      labelText: "Editar Titulo",
-                    ),
-                  ),
-                  TextField(
-                    controller: conentctrl,
-                    decoration: const InputDecoration(
-                      labelText: "Editar contenido",
-                    ),
-                  ),
-                  TextField(
-                    controller: datectrl,
-                    decoration: InputDecoration(labelText: "Editar Fecha"),
-                  ),
-
-                  TextField(
-                    controller: categoryidctrl,
-                    decoration: InputDecoration(
-                      label: Text("Editar Id De Categoria"),
-                    ),
-                  ),
-                  Row(
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+                return SingleChildScrollView(
+                  child: Column(
                     children: [
-                      const Text("Completado"),
-                      Checkbox(
-                        value: iscompleted,
-                        onChanged:
-                            (val) => setState(() => iscompleted = val ?? false),
+                      TextField(
+                        controller: titlectrl,
+                        decoration: const InputDecoration(
+                          labelText: "Editar Titulo",
+                        ),
+                      ),
+                      TextField(
+                        controller: conentctrl,
+                        decoration: const InputDecoration(
+                          labelText: "Editar contenido",
+                        ),
+                      ),
+                      TextField(
+                        controller: datectrl,
+                        decoration: InputDecoration(labelText: "Editar Fecha"),
+                      ),
+
+                      TextField(
+                        controller: categoryidctrl,
+                        decoration: InputDecoration(
+                          label: Text("Editar Id De Categoria"),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Text("Completado"),
+                          Checkbox(
+                            value: iscompleted,
+                            onChanged:
+                                (val) =>
+                                    setState(() => iscompleted = val ?? false),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
             actions: [
               TextButton(
@@ -163,6 +168,10 @@ class _LessonListScreenState extends State<LessonListScreen> {
                       'title': titlectrl.text,
                       'content': conentctrl.text,
                       'date': fechaIso,
+                      'state':
+                          iscompleted
+                              ? 1
+                              : 0, // se agrego el estado para poder cambiar el tipo de estado y se pudiera mostrar, como completo o incompleto
                     },
                     where: 'id = ?',
                     whereArgs: [lesson.id],

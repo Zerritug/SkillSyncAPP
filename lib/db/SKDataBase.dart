@@ -68,18 +68,6 @@ class AppDatabase {
             state BOOLEAN
           )
         ''');
-
-        await db.execute('''
-          CREATE TABLE stats (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            category_id INTEGER,
-            category_title TEXT,
-            user_name TEXT,
-            total_lessons INTEGER,
-            FOREIGN KEY (category_id) REFERENCES category(id),
-            FOREIGN KEY (user_name) REFERENCES user(name)
-          )
-        ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         // Eliminar tabla mal escrita si existe

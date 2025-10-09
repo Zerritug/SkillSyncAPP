@@ -5,34 +5,42 @@ import 'package:skillsync/features/Providers/ReminderProvider.dart';
 import 'routing/AppRouter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-import 'package:skillsync/services/NotificationService.dart';
-import 'dart:io';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'package:permission_handler/permission_handler.dart';
+import 'package:skillsync/services/NotificationService.dart';
+
+import 'package:skillsync/welcomescreen/screens/welcomescreen.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin(); //llama a la libreria para poder ser usada con el plugin
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  tz.initializeTimeZones();
+  tz.initializeTimeZones(); //inicializa la libreria de timezones
 
-  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-  const initSettings = InitializationSettings(android: androidSettings);
+  const androidSettings = AndroidInitializationSettings(
+    '@mipmap/ic_launcher',
+  ); //inicializa las configuraciones necesarias para android
+  const initSettings = InitializationSettings(
+    android: androidSettings,
+  ); // inicializa las configuracion para android
 
-  await flutterLocalNotificationsPlugin.initialize(initSettings);
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+  ); //inicializa las notificaciones del plugin segun initsetings
 
-  await NotificationService.init(); // ← si usas lógica adicional ahí
-  await NotificationService.solicitarPermisoNotificacion();
-  await NotificationService.solicitarPermisoExactAlarms();
+  await NotificationService.init(); //espera ser inizializado el servicio de notificaciones
+  await NotificationService.solicitarPermisoNotificacion(); //espera ser inizializadp el permiso de notificaciones aqui lo llama y delcara si fue o no aceptado
+  await NotificationService.solicitarPermisoExactAlarms(); //espera ser inizializadp  eñ permiso de alarmasaqui se llama y delcara si fue aceptado o no
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PhraseProvider()),
-        ChangeNotifierProvider(create: (_) => ReminderProvider()),
+        ChangeNotifierProvider(
+          create: (_) => PhraseProvider(),
+        ), //crea los providers o los inicializa // ṕhrase provider
+        ChangeNotifierProvider(
+          create: (_) => ReminderProvider(),
+        ), //crea los providers o los inicializa // reminders provider
       ],
       child: const SkillSyncApp(),
     ),
@@ -42,10 +50,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SkillSync',
-      home: Scaffold(body: Center(child: Text('SkillSync'))),
-    );
+    return MaterialApp(title: 'SkillSync', home: const WelcomeScreen());
   }
 }
 

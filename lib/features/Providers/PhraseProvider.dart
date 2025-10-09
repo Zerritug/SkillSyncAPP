@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:skillsync/db/Models/Phrase.dart';
 import 'package:skillsync/db/SKDataBase.dart';
 
+//este provider sirve para poder compartir datos,controladores,funciones etc entre la aplicacion
+//aqui estamos usando el provider para poder compartir las funciones de añadir,eliminar, y cargar
+
 class PhraseProvider extends ChangeNotifier {
   List<Phrase> _phrases = [];
   List<Phrase> get phrases => _phrases;
