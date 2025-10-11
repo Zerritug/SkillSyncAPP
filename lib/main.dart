@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skillsync/core/theme/Apptheme.dart';
 import 'package:skillsync/features/Providers/PhraseProvider.dart';
 import 'package:skillsync/features/Providers/ReminderProvider.dart';
 import 'routing/AppRouter.dart';
@@ -9,6 +10,17 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:skillsync/services/NotificationService.dart';
 
 import 'package:skillsync/welcomescreen/screens/welcomescreen.dart';
+
+//provider para manejar tema de la aplicacion
+class ThemeProvider extends ChangeNotifier {
+  bool _isDarkMode = false;
+  bool get isDarkMode => _isDarkMode;
+
+  void toggleTheme(bool value) {
+    _isDarkMode = value;
+    notifyListeners();
+  }
+}
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin(); //llama a la libreria para poder ser usada con el plugin
@@ -41,6 +53,7 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => ReminderProvider(),
         ), //crea los providers o los inicializa // reminders provider
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: const SkillSyncApp(),
     ),
@@ -59,9 +72,15 @@ class SkillSyncApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp.router(
       title: 'SkillSync',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: AppTheme.lightTheme, //modo claro
+      darkTheme: AppTheme.darkTheme, // modo oscuro
+      themeMode:
+          themeProvider._isDarkMode
+              ? ThemeMode.dark
+              : ThemeMode.light, //usa light o dark
       routerConfig: appRouter,
     );
   }

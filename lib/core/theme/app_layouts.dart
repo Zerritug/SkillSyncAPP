@@ -23,25 +23,18 @@ class LayoutStyles {
 
 class ButtonStyles {
   static final elevatedbutton1 = ElevatedButton.styleFrom(
-    //boton 1
     backgroundColor: AppColors.primary,
+    foregroundColor: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-    textStyle: TextStyle(color: AppColors.tertiary),
-    minimumSize: Size(100, 40), //tamaño minimo
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ), //borde
+    textStyle: AppTextStyles.button1,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   );
 
   static final elevatedbutton2 = ElevatedButton.styleFrom(
-    //boton 2
     backgroundColor: AppColors.tertiary,
-    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    foregroundColor: Colors.black,
     textStyle: AppTextStyles.button2,
-    minimumSize: Size(70, 40), //tamaño minimo
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ), //borde
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   );
 
   static final elevatedbutton3 = ElevatedButton.styleFrom(
@@ -62,5 +55,12 @@ class ButtonStyles {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
     ), //borde
+  );
+
+  static final elevatedbuttonDark = ElevatedButton.styleFrom(
+    backgroundColor: AppColors.secundary,
+    foregroundColor: Colors.white,
+    textStyle: AppTextStyles.button3,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   );
 }

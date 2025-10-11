@@ -108,9 +108,24 @@ class _MindMapState extends State<MindMap> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Theme.of(context).brightness ==
+        Brightness.dark; // detectar si está en modo oscuro
+    final backgroundColor =
+        isDarkMode ? const Color(0xFF121212) : const Color(0xFFF0FAFC);
+    final cardTopicColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mapa Mental'),
+        title: Text(
+          'Mapa Mental',
+          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+        ),
+        backgroundColor: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Colors.white : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -118,6 +133,7 @@ class _MindMapState extends State<MindMap> {
           },
         ),
       ),
+      backgroundColor: backgroundColor,
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -131,7 +147,11 @@ class _MindMapState extends State<MindMap> {
                   algorithm: algorithm,
                   paint:
                       Paint()
-                        ..color = Colors.blue
+                        ..color =
+                            isDarkMode
+                                ? Colors.white70
+                                : Colors
+                                    .blue // cambia el color de líneas
                         ..strokeWidth = 1
                         ..style = PaintingStyle.stroke,
                   builder: (Node node) {
@@ -170,12 +190,22 @@ class _MindMapState extends State<MindMap> {
                         }
                       },
                       child: Card(
-                        color: isTopic ? Colors.lightBlue[50] : Colors.white,
+                        color:
+                            isTopic
+                                ? (isDarkMode
+                                    ? const Color(0xFF252525)
+                                    : const Color.fromARGB(255, 240, 240, 240))
+                                : cardTopicColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: isDarkMode ? 2 : 4,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             isTopic ? '$label ($progress%)' : label,
                             style: TextStyle(
+                              color: textColor,
                               fontWeight:
                                   isTopic ? FontWeight.bold : FontWeight.normal,
                             ),

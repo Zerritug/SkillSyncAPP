@@ -1,6 +1,9 @@
+// text_styles.dart
 import 'package:flutter/material.dart';
+import 'package:skillsync/core/theme/app_colors.dart';
 
 class AppTextStyles {
+  // --- General ---
   static const greeting = TextStyle(
     color: Colors.white,
     fontSize: 22,
@@ -13,30 +16,33 @@ class AppTextStyles {
     letterSpacing: 1.2,
   );
 
+  // --- Modo claro ---
   static const titles = TextStyle(
-    color: Color.fromARGB(255, 0, 0, 0),
+    color: Colors.black,
     fontSize: 16,
     letterSpacing: 1.2,
   );
 
-  static const titlesW = TextStyle(
-    color: Color.fromARGB(255, 255, 255, 255),
-    fontSize: 25,
-    letterSpacing: 1.2,
-  );
-
-  static const userlevel = TextStyle(
-    color: Colors.white,
-    fontSize: 18,
-    letterSpacing: 1.2,
-  );
-
-  static const usualtext = TextStyle(
-    color: Colors.white,
+  static const usualtextLight = TextStyle(
+    color: Colors.black87,
     fontSize: 12,
     fontWeight: FontWeight.w500,
   );
 
+  // --- Modo oscuro ---
+  static const titlesW = TextStyle(
+    color: Colors.white,
+    fontSize: 25,
+    letterSpacing: 1.2,
+  );
+
+  static const usualtextDark = TextStyle(
+    color: AppColors.darkText,
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+
+  // --- Botones ---
   static const button1 = TextStyle(
     color: Colors.white,
     fontSize: 10,
@@ -44,7 +50,7 @@ class AppTextStyles {
   );
 
   static const button2 = TextStyle(
-    color: Color.fromARGB(255, 0, 0, 0),
+    color: Colors.black,
     fontSize: 10,
     fontWeight: FontWeight.w200,
   );

@@ -10,6 +10,7 @@ import 'package:skillsync/features/Providers/PhraseProvider.dart';
 import 'package:skillsync/db/SKDataBase.dart';
 import 'package:skillsync/db/Models/User.dart';
 import 'package:skillsync/db/Models/Objetive.dart';
+import 'package:skillsync/main.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -21,6 +22,80 @@ class MainMenuScreen extends StatefulWidget {
 class MainMenuScreenState extends State<MainMenuScreen> {
   User? user;
   List<weeklyobjective> Objetives = [];
+
+  Future<void> _showSettings() async {
+    final themeprovider = Provider.of<ThemeProvider>(
+      context,
+      listen: false,
+    ); //provider declarado en main
+
+    bool isDarkTheme =
+        themeprovider.isDarkMode; //validar si tiene activado el modo oscuro
+
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setDialogState) {
+            return AlertDialog(
+              backgroundColor:
+                  themeprovider.isDarkMode
+                      ? AppColors.darkSurface
+                      : Colors.white,
+              title: Text(
+                "Settings",
+                style: TextStyle(
+                  color:
+                      themeprovider.isDarkMode
+                          ? AppColors.darkText
+                          : Colors.black,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CheckboxListTile(
+                      title: Text(
+                        "Tema oscuro",
+                        style: TextStyle(
+                          color:
+                              themeprovider.isDarkMode
+                                  ? AppColors.darkText
+                                  : Colors.black,
+                        ),
+                      ),
+                      activeColor: AppColors.primary,
+                      value: isDarkTheme,
+                      onChanged: (val) {
+                        setDialogState(() {
+                          isDarkTheme = val ?? false;
+                        });
+                        themeprovider.toggleTheme(isDarkTheme);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "Cerrar",
+                    style: TextStyle(
+                      color:
+                          themeprovider.isDarkMode
+                              ? AppColors.darkText
+                              : Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   Future<void> _loaduserdata() async {
     final db = await AppDatabase.initDB();
@@ -41,10 +116,26 @@ class MainMenuScreenState extends State<MainMenuScreen> {
     await showDialog(
       context: context,
       builder: (_) {
+        final themeprovider = Provider.of<ThemeProvider>(
+          context,
+          listen: false,
+        );
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: const Text('Agregar Objetivo'),
+              backgroundColor:
+                  themeprovider.isDarkMode
+                      ? AppColors.darkSurface
+                      : Colors.white,
+              title: Text(
+                'Agregar Objetivo',
+                style: TextStyle(
+                  color:
+                      themeprovider.isDarkMode
+                          ? AppColors.darkText
+                          : Colors.black,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -64,9 +155,18 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                     Row(
                       children: [
-                        const Text("Completado"),
+                        Text(
+                          "Completado",
+                          style: TextStyle(
+                            color:
+                                themeprovider.isDarkMode
+                                    ? AppColors.darkText
+                                    : Colors.black,
+                          ),
+                        ),
                         Checkbox(
                           value: isCompleted,
+                          activeColor: AppColors.primary,
                           onChanged: (val) {
                             setDialogState(() {
                               isCompleted = val ?? false;
@@ -155,7 +255,9 @@ class MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeprovider = Provider.of<ThemeProvider>(context);
     final screenWidth = MediaQuery.of(context).size.width;
+    final isDark = themeprovider.isDarkMode;
 
     return Scaffold(
       appBar: AppBar(
@@ -175,8 +277,14 @@ class MainMenuScreenState extends State<MainMenuScreen> {
             style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: _showSettings,
+            icon: const Icon(Icons.settings),
+          ), //mostrar boton superior de configuracion
+        ],
       ),
-      backgroundColor: AppColors.tertiary,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.tertiary,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -184,6 +292,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
             children: [
               const SizedBox(height: 20),
 
+              // Botones principales
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 12,
@@ -191,12 +300,18 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () => context.go('/phrases'),
-                    style: ButtonStyles.elevatedbutton1,
+                    style:
+                        isDark
+                            ? ButtonStyles.elevatedbuttonDark
+                            : ButtonStyles.elevatedbutton1,
                     child: const Text('Frases', style: AppTextStyles.button1),
                   ),
                   ElevatedButton(
                     onPressed: () => context.go('/reminders'),
-                    style: ButtonStyles.elevatedbutton1,
+                    style:
+                        isDark
+                            ? ButtonStyles.elevatedbuttonDark
+                            : ButtonStyles.elevatedbutton1,
                     child: const Text(
                       'Reminders',
                       style: AppTextStyles.button1,
@@ -204,7 +319,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () => context.go('/mindmap'),
-                    style: ButtonStyles.elevatedbutton1,
+                    style:
+                        isDark
+                            ? ButtonStyles.elevatedbuttonDark
+                            : ButtonStyles.elevatedbutton1,
                     child: const Text('MindMaps', style: AppTextStyles.button1),
                   ),
                 ],
@@ -217,8 +335,12 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 builder: (context, phraseProvider, _) {
                   return Container(
                     decoration: BoxDecoration(
-                      color: AppColors.tertiary,
-                      border: Border.all(width: 0.5, color: AppColors.sixtiary),
+                      color:
+                          isDark ? AppColors.darkSurface : AppColors.tertiary,
+                      border: Border.all(
+                        width: 0.5,
+                        color: isDark ? AppColors.darkHint : AppColors.sixtiary,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     width: screenWidth * 0.9,
@@ -228,13 +350,20 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                       itemBuilder: (_, index) {
                         final phrase = phraseProvider.phrases[index];
                         return Card(
+                          color: isDark ? AppColors.darkSurface : Colors.white,
                           margin: const EdgeInsets.symmetric(
                             vertical: 6,
                             horizontal: 8,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
-                            child: Text(phrase.text),
+                            child: Text(
+                              phrase.text,
+                              style: TextStyle(
+                                color:
+                                    isDark ? AppColors.darkText : Colors.black,
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -244,9 +373,13 @@ class MainMenuScreenState extends State<MainMenuScreen> {
               ),
 
               const SizedBox(height: 20),
-              const Text("Acciones Rápidas", style: AppTextStyles.titles),
+              Text(
+                "Acciones Rápidas",
+                style: isDark ? AppTextStyles.titlesW : AppTextStyles.titles,
+              ),
               const SizedBox(height: 20),
 
+              // Botones secundarios
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 12,
@@ -254,7 +387,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () => context.go('/addLessons'),
-                    style: ButtonStyles.elevatedbutton1,
+                    style:
+                        isDark
+                            ? ButtonStyles.elevatedbuttonDark
+                            : ButtonStyles.elevatedbutton1,
                     child: const Text(
                       'Añadir Lecciones',
                       style: AppTextStyles.button1,
@@ -262,7 +398,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () => context.go('/addTopics'),
-                    style: ButtonStyles.elevatedbutton1,
+                    style:
+                        isDark
+                            ? ButtonStyles.elevatedbuttonDark
+                            : ButtonStyles.elevatedbutton1,
                     child: const Text(
                       'Añadir Tema',
                       style: AppTextStyles.button1,
@@ -273,6 +412,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
 
               const SizedBox(height: 20),
 
+              // Ver temas/lecciones
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 12,
@@ -298,21 +438,30 @@ class MainMenuScreenState extends State<MainMenuScreen> {
               ),
 
               const SizedBox(height: 30),
-              const Text("Objetivos Semanales", style: AppTextStyles.titles),
+              Text(
+                "Objetivos Semanales",
+                style: isDark ? AppTextStyles.titlesW : AppTextStyles.titles,
+              ),
               const SizedBox(height: 20),
 
               ElevatedButton(
                 onPressed: _addObjetive,
-                style: ButtonStyles.elevatedbutton1,
-                child: Text("Agregar", style: AppTextStyles.button3),
+                style:
+                    isDark
+                        ? ButtonStyles.elevatedbuttonDark
+                        : ButtonStyles.elevatedbutton1,
+                child: const Text("Agregar", style: AppTextStyles.button3),
               ),
 
               const SizedBox(height: 20),
 
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.tertiary,
-                  border: Border.all(width: 0.5, color: AppColors.sixtiary),
+                  color: isDark ? AppColors.darkSurface : AppColors.tertiary,
+                  border: Border.all(
+                    width: 0.5,
+                    color: isDark ? AppColors.darkHint : AppColors.sixtiary,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 width: screenWidth * 0.9,
@@ -323,6 +472,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   itemBuilder: (_, index) {
                     final objetive = Objetives[index];
                     return Card(
+                      color: isDark ? AppColors.darkSurface : Colors.white,
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       child: Padding(
                         padding: const EdgeInsets.all(10),
@@ -334,19 +484,34 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                                 Expanded(
                                   child: Text(
                                     objetive.title,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      color:
+                                          isDark
+                                              ? AppColors.darkText
+                                              : Colors.black,
                                     ),
                                   ),
                                 ),
                                 Text(
                                   objetive.date,
-                                  style: const TextStyle(color: Colors.grey),
+                                  style: TextStyle(
+                                    color:
+                                        isDark
+                                            ? AppColors.darkHint
+                                            : Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 8),
-                            Text(objetive.description),
+                            Text(
+                              objetive.description,
+                              style: TextStyle(
+                                color:
+                                    isDark ? AppColors.darkText : Colors.black,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  //  Colores base
   static const primary = Color(0xFF1976D2);
   static const secundary = Color.fromARGB(255, 147, 83, 248);
   static const tertiary = Color(0xFFF0FAFC);
-
   static const quaternary = Color(0xFF42A5F5);
   static const quinary = Color.fromARGB(255, 253, 214, 41);
   static const sixtiary = Color.fromARGB(255, 139, 139, 139);
@@ -20,4 +20,10 @@ class AppColors {
     Color.fromARGB(255, 0, 12, 185),
     Color.fromARGB(255, 94, 19, 107),
   ];
+
+  // Colores adicionales para modo oscuro
+  static const darkBackground = Color(0xFF121212);
+  static const darkSurface = Color(0xFF1E1E1E);
+  static const darkText = Color(0xFFEAEAEA);
+  static const darkHint = Color(0xFF9E9E9E);
 }
