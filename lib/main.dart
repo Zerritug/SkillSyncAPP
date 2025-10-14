@@ -6,10 +6,23 @@ import 'package:skillsync/features/Providers/ReminderProvider.dart';
 import 'routing/AppRouter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:skillsync/services/NotificationService.dart';
 
 import 'package:skillsync/welcomescreen/screens/welcomescreen.dart';
+//provider para idiomas
+
+class LocalLenguageProvider extends ChangeNotifier {
+  Locale _locale = Locale('es');
+  Locale get locale => _locale;
+
+  void setLocale(Locale newLocale) {
+    _locale = newLocale;
+    notifyListeners();
+  }
+}
 
 //provider para manejar tema de la aplicacion
 class ThemeProvider extends ChangeNotifier {
@@ -54,6 +67,7 @@ void main() async {
           create: (_) => ReminderProvider(),
         ), //crea los providers o los inicializa // reminders provider
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocalLenguageProvider()),
       ],
       child: const SkillSyncApp(),
     ),
@@ -73,14 +87,21 @@ class SkillSyncApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocalLenguageProvider>(context);
+
     return MaterialApp.router(
       title: 'SkillSync',
-      theme: AppTheme.lightTheme, //modo claro
-      darkTheme: AppTheme.darkTheme, // modo oscuro
-      themeMode:
-          themeProvider._isDarkMode
-              ? ThemeMode.dark
-              : ThemeMode.light, //usa light o dark
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      locale: localeProvider.locale, // ✅ idioma dinámico corregido
+      supportedLocales: const [Locale('es'), Locale('en')],
+      localizationsDelegates: const [
+        AppLocalizations.delegate, // 👈 asegúrate de tener esto generado
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       routerConfig: appRouter,
     );
   }
