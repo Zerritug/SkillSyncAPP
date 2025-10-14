@@ -10,12 +10,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:skillsync/services/NotificationService.dart';
-
 import 'package:skillsync/welcomescreen/screens/welcomescreen.dart';
-//provider para idiomas
 
-class LocalLenguageProvider extends ChangeNotifier {
-  Locale _locale = Locale('es');
+/// Provider para manejar el idioma
+class LocalLanguageProvider extends ChangeNotifier {
+  Locale _locale = const Locale('es');
   Locale get locale => _locale;
 
   void setLocale(Locale newLocale) {
@@ -24,7 +23,7 @@ class LocalLenguageProvider extends ChangeNotifier {
   }
 }
 
-//provider para manejar tema de la aplicacion
+/// Provider para manejar el tema de la aplicación
 class ThemeProvider extends ChangeNotifier {
   bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
@@ -36,49 +35,32 @@ class ThemeProvider extends ChangeNotifier {
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin(); //llama a la libreria para poder ser usada con el plugin
+    FlutterLocalNotificationsPlugin();
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  tz.initializeTimeZones(); //inicializa la libreria de timezones
+  tz.initializeTimeZones();
 
-  const androidSettings = AndroidInitializationSettings(
-    '@mipmap/ic_launcher',
-  ); //inicializa las configuraciones necesarias para android
-  const initSettings = InitializationSettings(
-    android: androidSettings,
-  ); // inicializa las configuracion para android
+  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const initSettings = InitializationSettings(android: androidSettings);
 
-  await flutterLocalNotificationsPlugin.initialize(
-    initSettings,
-  ); //inicializa las notificaciones del plugin segun initsetings
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
 
-  await NotificationService.init(); //espera ser inizializado el servicio de notificaciones
-  await NotificationService.solicitarPermisoNotificacion(); //espera ser inizializadp el permiso de notificaciones aqui lo llama y delcara si fue o no aceptado
-  await NotificationService.solicitarPermisoExactAlarms(); //espera ser inizializadp  eñ permiso de alarmasaqui se llama y delcara si fue aceptado o no
+  await NotificationService.init();
+  await NotificationService.solicitarPermisoNotificacion();
+  await NotificationService.solicitarPermisoExactAlarms();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => PhraseProvider(),
-        ), //crea los providers o los inicializa // ṕhrase provider
-        ChangeNotifierProvider(
-          create: (_) => ReminderProvider(),
-        ), //crea los providers o los inicializa // reminders provider
+        ChangeNotifierProvider(create: (_) => PhraseProvider()),
+        ChangeNotifierProvider(create: (_) => ReminderProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LocalLenguageProvider()),
+        ChangeNotifierProvider(create: (_) => LocalLanguageProvider()),
       ],
       child: const SkillSyncApp(),
     ),
   );
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: 'SkillSync', home: const WelcomeScreen());
-  }
 }
 
 class SkillSyncApp extends StatelessWidget {
@@ -87,17 +69,17 @@ class SkillSyncApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final localeProvider = Provider.of<LocalLenguageProvider>(context);
+    final localeProvider = Provider.of<LocalLanguageProvider>(context);
 
     return MaterialApp.router(
       title: 'SkillSync',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      locale: localeProvider.locale, // ✅ idioma dinámico corregido
+      locale: localeProvider.locale,
       supportedLocales: const [Locale('es'), Locale('en')],
       localizationsDelegates: const [
-        AppLocalizations.delegate, // 👈 asegúrate de tener esto generado
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

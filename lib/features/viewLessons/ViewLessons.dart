@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../db/SKDataBase.dart';
 import '../../db/Models/Lesson.dart';
@@ -25,6 +26,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
     'Titulo',
   ]; //LISTA OPCIONES DROPDWONBUTTON
   String dropdownbuttonvalue = 'Fecha'; //valor inicial del dropdown
+
   @override
   void initState() {
     super.initState();
@@ -72,9 +74,9 @@ class _LessonListScreenState extends State<LessonListScreen> {
     final db = await AppDatabase.initDB();
     await db.delete('lesson', where: 'id = ?', whereArgs: [id]);
     _loadLessons();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Eliminado correctamente")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context)!.deleteSuccess)),
+    );
   }
 
   //scontroladores y mostrar dialog para editar las lecciones
@@ -92,7 +94,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
       context: context,
       builder:
           (_) => AlertDialog(
-            title: const Text("Editar Leccion"),
+            title: Text(AppLocalizations.of(context)!.editLessonTitle),
             content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
                 return SingleChildScrollView(
@@ -100,30 +102,35 @@ class _LessonListScreenState extends State<LessonListScreen> {
                     children: [
                       TextField(
                         controller: titlectrl,
-                        decoration: const InputDecoration(
-                          labelText: "Editar Titulo",
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.editTitleLabel,
                         ),
                       ),
                       TextField(
                         controller: conentctrl,
-                        decoration: const InputDecoration(
-                          labelText: "Editar contenido",
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.editContentLabel,
                         ),
                       ),
                       TextField(
                         controller: datectrl,
-                        decoration: InputDecoration(labelText: "Editar Fecha"),
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.editDateLabel,
+                        ),
                       ),
-
                       TextField(
                         controller: categoryidctrl,
                         decoration: InputDecoration(
-                          label: Text("Editar Id De Categoria"),
+                          labelText:
+                              AppLocalizations.of(context)!.editCategoryIdLabel,
                         ),
                       ),
                       Row(
                         children: [
-                          const Text("Completado"),
+                          Text(AppLocalizations.of(context)!.completedLabel),
                           Checkbox(
                             value: iscompleted,
                             onChanged:
@@ -153,8 +160,12 @@ class _LessonListScreenState extends State<LessonListScreen> {
                       ); //formateo de fecha ,
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                        SnackBar(
+                          content: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.invalidDateFormatMessage,
+                          ),
                         ),
                       );
                       return;
@@ -179,14 +190,16 @@ class _LessonListScreenState extends State<LessonListScreen> {
                   Navigator.pop(context);
                   _loadLessons();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Editado correctamente")),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.editSuccess),
+                    ),
                   );
                 },
-                child: const Text("Guardar"),
+                child: Text(AppLocalizations.of(context)!.saveButton),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('cancelar'),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
               ),
             ],
           ),
@@ -195,9 +208,10 @@ class _LessonListScreenState extends State<LessonListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!; // alias corto
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Lecciones', style: AppTextStyles.titlesW),
+        title: Text(l10n.lessonsListTitle, style: AppTextStyles.titlesW),
         backgroundColor: AppColors.quaternary,
       ),
       body: Padding(
@@ -227,7 +241,9 @@ class _LessonListScreenState extends State<LessonListScreen> {
                 Expanded(
                   child: TextField(
                     controller: _dateSearchCtrl,
-                    decoration: InputDecoration(label: Text("Buscar leccion")),
+                    decoration: InputDecoration(
+                      labelText: l10n.searchLessonLabel,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -237,7 +253,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
 
                     if (entrada.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Esta vacio")),
+                        SnackBar(content: Text(l10n.emptyFieldMessage)),
                       );
                       return;
                     }
@@ -252,8 +268,8 @@ class _LessonListScreenState extends State<LessonListScreen> {
                         _seachlessonbydate(fechaIso);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Formato inválido. Usa DD/MM/YYYY"),
+                          SnackBar(
+                            content: Text(l10n.invalidDateFormatMessage),
                           ),
                         );
                       }
@@ -262,14 +278,13 @@ class _LessonListScreenState extends State<LessonListScreen> {
                         _searchbytitle(entrada);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Texto no encontrado")),
+                          SnackBar(content: Text(l10n.textNotFoundMessage)),
                         );
                       }
                     }
                   },
-
                   icon: const Icon(Icons.search),
-                  label: const Text("Buscar"),
+                  label: Text(l10n.searchButton),
                 ),
               ],
             ),
@@ -296,7 +311,11 @@ class _LessonListScreenState extends State<LessonListScreen> {
                                 Text(lesson.title),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Estado: ${lesson.state ? "Completada" : "Pendiente"}',
+                                  l10n.statusLabel(
+                                    lesson.state
+                                        ? l10n.completedStatus
+                                        : l10n.pendingStatus,
+                                  ),
                                 ),
                               ],
                             ),
@@ -328,7 +347,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
                 context.go('/mainmenu');
               },
               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style: AppTextStyles.button3),
+              child: Text(l10n.backButton, style: AppTextStyles.button3),
             ),
           ],
         ),

@@ -3,21 +3,20 @@ import 'package:provider/provider.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
-import 'package:skillsync/db/Models/Phrase.dart';
 import 'package:skillsync/features/Providers/PhraseProvider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FrasesMotivacionales extends StatelessWidget {
   const FrasesMotivacionales({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final phraseProvider = context.watch<PhraseProvider>();
-    final phrases =
-        phraseProvider
-            .phrases; //provider, este sirve como nueva variable para delcarar las listas que se consumen desde el provider
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Frases Motivacionales')),
+      appBar: AppBar(title: Text(loc.motivationalPhrasesTitle)),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -29,7 +28,7 @@ class FrasesMotivacionales extends StatelessWidget {
                   context: context,
                   builder:
                       (_) => AlertDialog(
-                        title: const Text("Agregar frase"),
+                        title: Text(loc.addPhraseTitle),
                         content: TextField(controller: controller),
                         actions: [
                           TextButton(
@@ -39,18 +38,18 @@ class FrasesMotivacionales extends StatelessWidget {
                                 Navigator.pop(context);
                               }
                             },
-                            child: const Text("Guardar"),
+                            child: Text(loc.saveButton),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text("Cancelar"),
+                            child: Text(loc.cancelButton),
                           ),
                         ],
                       ),
                 );
               },
               style: ButtonStyles.elevatedbutton1,
-              child: Text("Agregar", style: AppTextStyles.button3),
+              child: Text(loc.addButton, style: AppTextStyles.button3),
             ),
             Container(
               decoration: BoxDecoration(
@@ -84,7 +83,7 @@ class FrasesMotivacionales extends StatelessWidget {
                 context.go('/mainmenu');
               },
               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style: AppTextStyles.button3),
+              child: Text(loc.backButton, style: AppTextStyles.button3),
             ),
           ],
         ),

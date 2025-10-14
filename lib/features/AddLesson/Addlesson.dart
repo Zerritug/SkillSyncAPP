@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 
 import '../../db/SKDataBase.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
@@ -24,13 +24,14 @@ class _LessonScreen extends State<LessonScreen> {
   bool state = false;
 
   Future<void> _addLesson() async {
+    final loc = AppLocalizations.of(context)!;
     if (titleController.text.isEmpty ||
         contentController.text.isEmpty ||
         dateController.text.isEmpty ||
         categoryIdController.text.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Faltan datos")));
+      ).showSnackBar(SnackBar(content: Text(loc.missingDataMessageADD)));
       return;
     }
 
@@ -38,7 +39,7 @@ class _LessonScreen extends State<LessonScreen> {
     if (categoryId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Id de categoria invalido")));
+      ).showSnackBar(SnackBar(content: Text(loc.topicNotFoundMessage)));
     }
 
     final db = await AppDatabase.initDB();
@@ -51,7 +52,7 @@ class _LessonScreen extends State<LessonScreen> {
     if (result.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("El tema no existe")));
+      ).showSnackBar(SnackBar(content: Text(loc.invalidCategoryIdMessage)));
       return;
     }
     await db.insert('lesson', {
@@ -70,15 +71,16 @@ class _LessonScreen extends State<LessonScreen> {
     setState(() => state = false);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Lección agregada')));
+    ).showSnackBar(SnackBar(content: Text(loc.lessonAddedMessage)));
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.eightiary,
-        title: const Text('Agregar Lección', style: AppTextStyles.titlesW),
+        title: Text(loc.lessonScreenTitle, style: AppTextStyles.titlesW),
       ),
 
       body: Padding(
@@ -87,23 +89,23 @@ class _LessonScreen extends State<LessonScreen> {
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(labelText: 'Título'),
+              decoration: InputDecoration(labelText: loc.titleLabelADD),
             ),
             TextField(
               controller: contentController,
-              decoration: const InputDecoration(labelText: 'Contenido'),
+              decoration: InputDecoration(labelText: loc.contentLabelADD),
             ),
             TextField(
               controller: dateController,
-              decoration: const InputDecoration(labelText: 'Fecha'),
+              decoration: InputDecoration(labelText: loc.dateLabelADD),
             ),
             TextField(
               controller: categoryIdController,
-              decoration: const InputDecoration(labelText: 'ID Categoría'),
+              decoration: InputDecoration(labelText: loc.categoryIdLabel),
             ),
             Row(
               children: [
-                const Text('Completada'),
+                Text(loc.completedLabelADD),
                 Checkbox(
                   value: state,
                   onChanged: (val) => setState(() => state = val ?? false),
@@ -114,7 +116,7 @@ class _LessonScreen extends State<LessonScreen> {
             ElevatedButton(
               onPressed: _addLesson,
               style: ButtonStyles.elevatedbutton4,
-              child: const Text('Guardar', style: AppTextStyles.button3),
+              child: Text(loc.saveButtonADD, style: AppTextStyles.button3),
             ),
             const SizedBox(height: 30),
 
@@ -130,7 +132,7 @@ class _LessonScreen extends State<LessonScreen> {
                 context.go('/mainmenu');
               },
               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style: AppTextStyles.button3),
+              child: Text(loc.backButtonADD, style: AppTextStyles.button3),
             ),
           ],
         ),

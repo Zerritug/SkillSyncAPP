@@ -1,51 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:skillsync/core/theme/app_colors.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
 import 'package:skillsync/features/Providers/ReminderProvider.dart';
-import 'package:skillsync/db/Models/Reminder.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skillsync/services/NotificationService.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:intl/intl.dart'; // IMPORTANTE para DateFormat
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReminderScreen extends StatelessWidget {
   const ReminderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final reminderProvider =
-        context
-            .watch<
-              ReminderProvider
-            >(); //espera el contenido funciones,controladores etc delprovider de reminders
+    final reminderProvider = context.watch<ReminderProvider>();
     final reminders = reminderProvider.reminders;
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    void mostrarNotificacionSimple() async {
-      await flutterLocalNotificationsPlugin.show(
-        0,
-        '¡Hola Runny!',
-        'Esta es una notificación de prueba 🎉',
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'reminder_channel',
-            'Pruebas',
-            channelDescription: 'Canal para pruebas simples',
-            importance: Importance.high,
-            priority: Priority.high,
-          ),
-        ),
-      );
-    } // canal prueba, se hizo para verificar errores dentro del codigo y saber que tipo de problema sugeria
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Recordatorios')),
+      appBar: AppBar(title: Text(l10n!.remindersTitle)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -54,7 +28,7 @@ class ReminderScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {},
               style: ButtonStyles.elevatedbutton1,
-              child: Text("Agregar", style: AppTextStyles.button3),
+              child: Text(l10n!.addButton, style: AppTextStyles.button3),
             ),
             const SizedBox(height: 16),
             Container(
@@ -86,7 +60,13 @@ class ReminderScreen extends StatelessWidget {
                                 val,
                               );
                               print(
-                                'Notificación ${val ? "activada" : "cancelada"} para ${reminder.message}',
+                                val
+                                    ? l10n!.activatedNotificationLog(
+                                      reminder.message,
+                                    )
+                                    : l10n!.cancelledNotificationLog(
+                                      reminder.message,
+                                    ),
                               );
                             },
                           ),
@@ -108,53 +88,42 @@ class ReminderScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () => context.go('/mainmenu'),
               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style: AppTextStyles.button3),
+              child: Text(l10n!.backButton, style: AppTextStyles.button3),
             ),
             ElevatedButton(
               onPressed: () async {
                 await flutterLocalNotificationsPlugin.show(
                   999,
-                  'Test canal programado',
-                  '¿Este canal muestra notificaciones?',
-                  const NotificationDetails(
+                  l10n.testScheduledChannelTitle,
+                  l10n.testScheduledChannelBody,
+                  NotificationDetails(
                     android: AndroidNotificationDetails(
                       'scheduled_channel',
-                      'Scheduled Reminders',
-                      channelDescription:
-                          'Canal para notificaciones programadas',
+                      l10n.scheduledChannelName,
+                      channelDescription: l10n.scheduledChannelDescription,
                       importance: Importance.high,
                       priority: Priority.high,
                     ),
                   ),
                 );
               },
-              child: const Text('Probar canal programado'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await openAppSettings();
-              },
-              child: const Text('Abrir ajustes de notificación'),
+              child: Text(l10n.testScheduledChannelButton),
             ),
             ElevatedButton(
               onPressed: () async {
                 final pending =
                     await flutterLocalNotificationsPlugin
                         .pendingNotificationRequests();
-                print('🔍 Notificaciones pendientes: ${pending.length}');
-                for (var p in pending) {
-                  print('📝 id: ${p.id}, title: ${p.title}, body: ${p.body}');
-                }
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Hay ${pending.length} notificaciones pendientes',
+                      l10n.pendingNotificationsCount(pending.length),
                     ),
                   ),
                 );
               },
-              child: const Text('Ver notificaciones pendientes'),
+              child: Text(l10n.viewPendingNotifications),
             ),
           ],
         ),

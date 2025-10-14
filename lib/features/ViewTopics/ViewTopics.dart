@@ -7,6 +7,8 @@ import 'package:skillsync/core/theme/text_styles.dart';
 import "package:skillsync/core/theme/app_colors.dart";
 import 'package:intl/intl.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class TopicListScreen extends StatefulWidget {
   const TopicListScreen({super.key});
   @override
@@ -64,15 +66,17 @@ class _TopicListScreenState extends State<TopicListScreen> {
   }
 
   Future<void> _deleteTOpic(int id) async {
+    final l10n = AppLocalizations.of(context)!;
     final db = await AppDatabase.initDB();
     await db.delete('topic', where: 'id = ?', whereArgs: [id]);
     _loadTopics();
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text("Eliminado correctamente")));
+    ).showSnackBar(SnackBar(content: Text(l10n.topicDeleteSuccess)));
   }
 
   void _ShowEdit(Topic topic) {
+    final l10n = AppLocalizations.of(context)!;
     final titlectrl = TextEditingController(text: topic.title);
     final conentctrl = TextEditingController(text: topic.content);
     final datectrl = TextEditingController(text: topic.date);
@@ -84,30 +88,30 @@ class _TopicListScreenState extends State<TopicListScreen> {
       context: context,
       builder:
           (_) => AlertDialog(
-            title: const Text("Editar Tema"),
+            title: Text(l10n.editTopicTitle),
             content: SingleChildScrollView(
               child: Column(
                 children: [
                   Text('El id de la leccion es ${topic.id}'),
                   TextField(
                     controller: titlectrl,
-                    decoration: const InputDecoration(
-                      labelText: "Editar Titulo",
-                    ),
+                    decoration: InputDecoration(labelText: l10n.editTitleLabel),
                   ),
                   TextField(
                     controller: conentctrl,
-                    decoration: const InputDecoration(
-                      labelText: "Editar contenido",
+                    decoration: InputDecoration(
+                      labelText: l10n.editTopicContentLabel,
                     ),
                   ),
                   TextField(
                     controller: datectrl,
-                    decoration: InputDecoration(labelText: "Editar fecha"),
+                    decoration: InputDecoration(
+                      labelText: l10n.editTopicDateLabel,
+                    ),
                   ),
                   Row(
                     children: [
-                      const Text("Completado"),
+                      Text(l10n.editTopicCompletedLabel),
                       Checkbox(
                         value: iscompleted,
                         onChanged:
@@ -125,7 +129,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
 
                   if (entrada.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("La fecha está vacía")),
+                      SnackBar(content: Text(l10n.emptyFieldMessage)),
                     );
                     return;
                   }
@@ -141,9 +145,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
                       ).format(DateFormat('dd/MM/yyyy').parse(entrada));
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Formato inválido. Usa DD/MM/YYYY"),
-                        ),
+                        SnackBar(content: Text(l10n.topicSearchInvalidDate)),
                       );
                       return;
                     }
@@ -162,15 +164,15 @@ class _TopicListScreenState extends State<TopicListScreen> {
                   );
                   Navigator.pop(context);
                   _loadTopics();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Editado correctamente")),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(l10n.editSuccess)));
                 },
-                child: const Text("Guardar"),
+                child: Text(l10n.saveButton),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('cancelar'),
+                child: Text(l10n.cancelButton),
               ),
             ],
           ),
@@ -179,9 +181,10 @@ class _TopicListScreenState extends State<TopicListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!; // alias corto
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Temas', style: AppTextStyles.titlesW),
+        title: Text(l10n.topicListTitle, style: AppTextStyles.titlesW),
         backgroundColor: AppColors.primary,
       ),
       body: Padding(
@@ -211,7 +214,9 @@ class _TopicListScreenState extends State<TopicListScreen> {
                 Expanded(
                   child: TextField(
                     controller: searchdatecontroller,
-                    decoration: InputDecoration(label: Text("Buscar leccion")),
+                    decoration: InputDecoration(
+                      label: Text(l10n.searchTopicLabel),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -224,7 +229,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
                     // Si el campo está vacío, mostramos un mensaje
                     if (entrada.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Esta vacio")),
+                        SnackBar(content: Text(l10n.emptyTopicFieldMessage)),
                       );
                       return;
                     }
@@ -239,9 +244,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
                         _searchbydate(fechaIso);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Formato inválido. Usa DD/MM/YYYY"),
-                          ),
+                          SnackBar(content: Text(l10n.topicSearchInvalidDate)),
                         );
                       }
                     } else if (dropdownbuttonvalue == 'Titulo') {
@@ -249,13 +252,13 @@ class _TopicListScreenState extends State<TopicListScreen> {
                         _searchbywords(entrada);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Texto no encontrado")),
+                          SnackBar(content: Text(l10n.topicSearchTextNotFound)),
                         );
                       }
                     }
                   },
                   icon: const Icon(Icons.search),
-                  label: const Text("Buscar"),
+                  label: Text(l10n.searchButton),
                 ),
               ],
             ),
@@ -282,7 +285,11 @@ class _TopicListScreenState extends State<TopicListScreen> {
                                 Text(topic.title),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Estado: ${topic.state ? "Completado" : "Pendiente"}',
+                                  l10n.statusLabelLesson(
+                                    topic.state
+                                        ? l10n.completedStatus
+                                        : l10n.pendingStatus,
+                                  ),
                                 ),
                               ],
                             ),
@@ -315,7 +322,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
                 context.go('/mainmenu');
               },
               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style: AppTextStyles.button3),
+              child: Text(l10n.backButton, style: AppTextStyles.button3),
             ),
             const SizedBox(height: 20),
           ],

@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:skillsync/db/Models/Lesson.dart';
 import 'package:skillsync/db/SKDataBase.dart';
 import 'package:skillsync/db/Models/Topic.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MindMap extends StatefulWidget {
   const MindMap({super.key});
@@ -56,9 +59,9 @@ class _MindMapState extends State<MindMap> {
     graph.edges.clear();
     topicNodes.clear();
     lessonNodes.clear();
-
+    final l10n = AppLocalizations.of(context)!;
     // Nodo raíz central
-    final rootNode = Node.Id('Temas');
+    final rootNode = Node.Id(l10n.graphRootTitle);
     graph.addNode(rootNode);
 
     // Crear nodos por cada Topic
@@ -108,6 +111,7 @@ class _MindMapState extends State<MindMap> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDarkMode =
         Theme.of(context).brightness ==
         Brightness.dark; // detectar si está en modo oscuro
@@ -119,7 +123,7 @@ class _MindMapState extends State<MindMap> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Mapa Mental',
+          l10n.mindMapTitle,
           style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
         ),
         backgroundColor: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
@@ -136,7 +140,16 @@ class _MindMapState extends State<MindMap> {
       backgroundColor: backgroundColor,
       body:
           isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(),
+                    const SizedBox(height: 12),
+                    Text(l10n.loadingMessage),
+                  ],
+                ),
+              )
               : InteractiveViewer(
                 constrained: false,
                 boundaryMargin: const EdgeInsets.all(100),
@@ -155,7 +168,9 @@ class _MindMapState extends State<MindMap> {
                         ..strokeWidth = 1
                         ..style = PaintingStyle.stroke,
                   builder: (Node node) {
-                    final label = node.key?.value?.toString() ?? 'Node';
+                    final label =
+                        node.key?.value?.toString() ??
+                        l10n.graphNodeDefaultLabel;
 
                     // Detectar si es un topic para mostrar porcentaje
                     final topic = topics.firstWhere(
@@ -174,7 +189,7 @@ class _MindMapState extends State<MindMap> {
                     final progress =
                         (isTopic && topic.id != null)
                             ? calculateProgressForTopic(topic.id!)
-                            : null;
+                            : 0;
 
                     return GestureDetector(
                       onTap: () {
@@ -183,7 +198,7 @@ class _MindMapState extends State<MindMap> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'Tema: $label\nProgreso: $progress%',
+                                l10n.snackbarTopicProgress(label, progress),
                               ),
                             ),
                           );

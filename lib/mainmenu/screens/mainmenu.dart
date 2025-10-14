@@ -24,13 +24,9 @@ class MainMenuScreenState extends State<MainMenuScreen> {
   List<weeklyobjective> Objetives = [];
 
   Future<void> _showSettings() async {
-    final themeprovider = Provider.of<ThemeProvider>(
-      context,
-      listen: false,
-    ); //provider declarado en main
-
-    bool isDarkTheme =
-        themeprovider.isDarkMode; //validar si tiene activado el modo oscuro
+    final themeprovider = Provider.of<ThemeProvider>(context, listen: false);
+    final loc = AppLocalizations.of(context)!;
+    bool isDarkTheme = themeprovider.isDarkMode;
 
     await showDialog(
       context: context,
@@ -43,7 +39,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                       ? AppColors.darkSurface
                       : Colors.white,
               title: Text(
-                "Settings",
+                loc.settingsTitle,
                 style: TextStyle(
                   color:
                       themeprovider.isDarkMode
@@ -54,9 +50,36 @@ class MainMenuScreenState extends State<MainMenuScreen> {
               content: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Selector de idioma
+                    Consumer<LocalLanguageProvider>(
+                      builder: (context, languageProvider, _) {
+                        return DropdownButton<Locale>(
+                          value: languageProvider.locale,
+                          items: const [
+                            DropdownMenuItem(
+                              value: Locale('es'),
+                              child: Text('Español'),
+                            ),
+                            DropdownMenuItem(
+                              value: Locale('en'),
+                              child: Text('English'),
+                            ),
+                          ],
+                          onChanged: (Locale? newLocale) {
+                            if (newLocale != null) {
+                              languageProvider.setLocale(newLocale);
+                            }
+                          },
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Checkbox para tema oscuro
                     CheckboxListTile(
                       title: Text(
-                        "Tema oscuro",
+                        loc.darkThemeLabel,
                         style: TextStyle(
                           color:
                               themeprovider.isDarkMode
@@ -80,7 +103,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    "Cerrar",
+                    loc.closeButton,
                     style: TextStyle(
                       color:
                           themeprovider.isDarkMode
@@ -108,6 +131,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   Future<void> _addObjetive() async {
+    final loc = AppLocalizations.of(context)!;
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController dateController = TextEditingController();
@@ -128,7 +152,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                       ? AppColors.darkSurface
                       : Colors.white,
               title: Text(
-                'Agregar Objetivo',
+                loc.addObjectiveTitle,
                 style: TextStyle(
                   color:
                       themeprovider.isDarkMode
@@ -141,22 +165,22 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   children: [
                     TextField(
                       controller: titleController,
-                      decoration: const InputDecoration(labelText: "Título"),
+                      decoration: InputDecoration(labelText: loc.titleLabel),
                     ),
                     TextField(
                       controller: descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: "Descripción",
+                      decoration: InputDecoration(
+                        labelText: loc.descriptionLabel,
                       ),
                     ),
                     TextField(
                       controller: dateController,
-                      decoration: const InputDecoration(labelText: "Fecha"),
+                      decoration: InputDecoration(labelText: loc.dateLabel),
                     ),
                     Row(
                       children: [
                         Text(
-                          "Completado",
+                          loc.completedLabel,
                           style: TextStyle(
                             color:
                                 themeprovider.isDarkMode
@@ -184,9 +208,9 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     if (titleController.text.isEmpty ||
                         descriptionController.text.isEmpty ||
                         dateController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Faltan Datos")),
-                      );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(loc.missingData)));
                       return;
                     }
 
@@ -207,17 +231,15 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                       _loadobjetives();
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Objetivo agregado correctamente"),
-                        ),
+                        SnackBar(content: Text(loc.objectiveAdded)),
                       );
                     }
                   },
-                  child: const Text("Guardar"),
+                  child: Text(loc.saveButton),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar"),
+                  child: Text(loc.cancelButton),
                 ),
               ],
             );
@@ -238,12 +260,13 @@ class MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   Future<void> _deleteobjetive(int id) async {
+    final loc = AppLocalizations.of(context)!;
     final db = await AppDatabase.initDB();
     await db.delete('weekly_objective', where: 'id = ?', whereArgs: [id]);
     _loadobjetives();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Objetivo eliminado correctamente")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(loc.objectiveDeleted)));
   }
 
   @override
@@ -258,6 +281,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
     final themeprovider = Provider.of<ThemeProvider>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final isDark = themeprovider.isDarkMode;
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -273,7 +297,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
         title: Padding(
           padding: LayoutStyles.cardPadding,
           child: Text(
-            user != null ? 'Bienvenido, ${user!.name}' : 'Cargando usuario...',
+            user != null ? loc.welcomeUser(user!.name ?? '') : loc.loadingUser,
             style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
@@ -281,7 +305,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
           IconButton(
             onPressed: _showSettings,
             icon: const Icon(Icons.settings),
-          ), //mostrar boton superior de configuracion
+          ),
         ],
       ),
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.tertiary,
@@ -304,7 +328,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
                             : ButtonStyles.elevatedbutton1,
-                    child: const Text('Frases', style: AppTextStyles.button1),
+                    child: Text(
+                      loc.phrasesButton,
+                      style: AppTextStyles.button1,
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () => context.go('/reminders'),
@@ -312,8 +339,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
                             : ButtonStyles.elevatedbutton1,
-                    child: const Text(
-                      'Reminders',
+                    child: Text(
+                      loc.remindersButton,
                       style: AppTextStyles.button1,
                     ),
                   ),
@@ -323,7 +350,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
                             : ButtonStyles.elevatedbutton1,
-                    child: const Text('MindMaps', style: AppTextStyles.button1),
+                    child: Text(
+                      loc.mindMapsButton,
+                      style: AppTextStyles.button1,
+                    ),
                   ),
                 ],
               ),
@@ -374,7 +404,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
 
               const SizedBox(height: 20),
               Text(
-                "Acciones Rápidas",
+                loc.quickActionsTitle,
                 style: isDark ? AppTextStyles.titlesW : AppTextStyles.titles,
               ),
               const SizedBox(height: 20),
@@ -391,8 +421,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
                             : ButtonStyles.elevatedbutton1,
-                    child: const Text(
-                      'Añadir Lecciones',
+                    child: Text(
+                      loc.addLessonsButton,
                       style: AppTextStyles.button1,
                     ),
                   ),
@@ -402,8 +432,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
                             : ButtonStyles.elevatedbutton1,
-                    child: const Text(
-                      'Añadir Tema',
+                    child: Text(
+                      loc.addTopicButton,
                       style: AppTextStyles.button1,
                     ),
                   ),
@@ -421,16 +451,16 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   ElevatedButton(
                     onPressed: () => context.go('/viewLessons'),
                     style: ButtonStyles.elevatedbutton2,
-                    child: const Text(
-                      'Ver Lecciones',
+                    child: Text(
+                      loc.viewLessonsButton,
                       style: AppTextStyles.button2,
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () => context.go('/viewTopics'),
                     style: ButtonStyles.elevatedbutton2,
-                    child: const Text(
-                      'Ver Temas',
+                    child: Text(
+                      loc.viewTopicsButton,
                       style: AppTextStyles.button2,
                     ),
                   ),
@@ -439,7 +469,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
 
               const SizedBox(height: 30),
               Text(
-                "Objetivos Semanales",
+                loc.weeklyObjectivesTitle,
                 style: isDark ? AppTextStyles.titlesW : AppTextStyles.titles,
               ),
               const SizedBox(height: 20),
@@ -450,7 +480,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     isDark
                         ? ButtonStyles.elevatedbuttonDark
                         : ButtonStyles.elevatedbutton1,
-                child: const Text("Agregar", style: AppTextStyles.button3),
+                child: Text(loc.addButton, style: AppTextStyles.button3),
               ),
 
               const SizedBox(height: 20),
@@ -471,6 +501,10 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                   itemCount: Objetives.length,
                   itemBuilder: (_, index) {
                     final objetive = Objetives[index];
+                    final stateText =
+                        objetive.state
+                            ? loc.completedStatus
+                            : loc.pendingStatus;
                     return Card(
                       color: isDark ? AppColors.darkSurface : Colors.white,
                       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -517,7 +551,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Estado: ${objetive.state ? "Completado" : "Pendiente"}',
+                                  loc.statusLabel(stateText),
                                   style: TextStyle(
                                     color:
                                         objetive.state

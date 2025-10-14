@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../db/SKDataBase.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skillsync/core/theme/app_layouts.dart';
 import 'package:skillsync/core/theme/text_styles.dart';
@@ -22,12 +22,13 @@ class _TopicScreen extends State<TopicScreen> {
   bool isCompleted = false;
 
   Future<void> _addTopic() async {
+    final loc = AppLocalizations.of(context)!;
     if (titleController.text.isEmpty ||
         contentController.text.isEmpty ||
         dateController.text.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Faltan datos")));
+      ).showSnackBar(SnackBar(content: Text(loc.missingDataMessageADD)));
     }
     final db = await AppDatabase.initDB();
     await db.insert('topic', {
@@ -42,14 +43,15 @@ class _TopicScreen extends State<TopicScreen> {
 
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Tema agregado')));
+    ).showSnackBar(SnackBar(content: Text(loc.topicAddedMessageADD)));
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar Tema'),
+        title: Text(loc.topicScreenTitleADD),
         backgroundColor: AppColors.boldcolor,
       ),
       body: Padding(
@@ -58,20 +60,20 @@ class _TopicScreen extends State<TopicScreen> {
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(labelText: 'Título'),
+              decoration: InputDecoration(labelText: loc.titleLabelADD),
             ),
             TextField(
               controller: contentController,
-              decoration: const InputDecoration(labelText: 'Contenido'),
+              decoration: InputDecoration(labelText: loc.contentLabelADD),
             ),
             TextField(
               controller: dateController,
-              decoration: const InputDecoration(labelText: 'Fecha'),
+              decoration: InputDecoration(labelText: loc.dateLabelADD),
             ),
 
             Row(
               children: [
-                const Text('Completado'),
+                Text(loc.completedLabelADD),
                 Checkbox(
                   value: isCompleted,
                   onChanged:
@@ -84,21 +86,24 @@ class _TopicScreen extends State<TopicScreen> {
             ElevatedButton(
               onPressed: _addTopic,
               style: ButtonStyles.elevatedbutton4,
-              child: const Text('Guardar', style: AppTextStyles.button3),
+              child: Text(loc.saveButtonADD, style: AppTextStyles.button3),
             ),
             const SizedBox(height: 30),
 
             ElevatedButton(
               onPressed: () => context.go('/viewTopics'),
               style: ButtonStyles.elevatedbutton1,
-              child: const Text('Ver Temas', style: AppTextStyles.button3),
+              child: Text(
+                loc.viewTopicsButtonADD,
+                style: AppTextStyles.button3,
+              ),
             ),
             const SizedBox(height: 30),
 
             ElevatedButton(
               onPressed: () => context.go('/mainmenu'),
               style: ButtonStyles.elevatedbutton3,
-              child: const Text('Volver', style: AppTextStyles.button3),
+              child: Text(loc.backButtonADD, style: AppTextStyles.button3),
             ),
           ],
         ),
