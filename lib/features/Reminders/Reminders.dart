@@ -7,6 +7,7 @@ import 'package:skillsync/features/Providers/ReminderProvider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:skillsync/core/animations/Apptransitions.dart';
 
 class ReminderScreen extends StatelessWidget {
   const ReminderScreen({super.key});
@@ -86,7 +87,7 @@ class ReminderScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => context.go('/mainmenu'),
+              onPressed: () => context.go('/mainmenu', extra: 'forward'),
               style: ButtonStyles.elevatedbutton3,
               child: Text(l10n!.backButton, style: AppTextStyles.button3),
             ),

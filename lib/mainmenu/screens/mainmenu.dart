@@ -11,6 +11,7 @@ import 'package:skillsync/db/SKDataBase.dart';
 import 'package:skillsync/db/Models/User.dart';
 import 'package:skillsync/db/Models/Objetive.dart';
 import 'package:skillsync/main.dart';
+import 'package:skillsync/core/animations/Apptransitions.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -323,7 +324,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 runSpacing: 12,
                 children: [
                   ElevatedButton(
-                    onPressed: () => context.go('/phrases'),
+                    onPressed: () => context.push('/phrases', extra: 'forward'),
                     style:
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
@@ -334,7 +335,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.go('/reminders'),
+                    onPressed:
+                        () => context.push('/reminders', extra: 'forward'),
                     style:
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
@@ -345,7 +347,7 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.go('/mindmap'),
+                    onPressed: () => context.push('/mindmap', extra: 'forward'),
                     style:
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
@@ -416,7 +418,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 runSpacing: 12,
                 children: [
                   ElevatedButton(
-                    onPressed: () => context.go('/addLessons'),
+                    onPressed:
+                        () => context.push('/addLessons', extra: 'forward'),
                     style:
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
@@ -427,7 +430,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.go('/addTopics'),
+                    onPressed:
+                        () => context.push('/addTopics', extra: 'forward'),
                     style:
                         isDark
                             ? ButtonStyles.elevatedbuttonDark
@@ -449,7 +453,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                 runSpacing: 12,
                 children: [
                   ElevatedButton(
-                    onPressed: () => context.go('/viewLessons'),
+                    onPressed:
+                        () => context.push('/viewLessons', extra: 'forward'),
                     style: ButtonStyles.elevatedbutton2,
                     child: Text(
                       loc.viewLessonsButton,
@@ -457,7 +462,8 @@ class MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => context.go('/viewTopics'),
+                    onPressed:
+                        () => context.push('/viewTopics', extra: 'forward'),
                     style: ButtonStyles.elevatedbutton2,
                     child: Text(
                       loc.viewTopicsButton,

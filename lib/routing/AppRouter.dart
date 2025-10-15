@@ -9,6 +9,7 @@ import '../welcomescreen/screens/welcomescreen.dart';
 import '../mainmenu/screens/mainmenu.dart';
 import '../features/mindmap/screens/mindmap.dart';
 import 'route_names.dart';
+import 'package:skillsync/core/animations/Apptransitions.dart';
 
 //go router se implemento para la navegacion de la aplicacion, name para el nombre de la pantalla el path
 // que se declara en route_names.dart para tener un tipo de url al que dirigirse y el builder es la pantalla
@@ -19,47 +20,101 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: RouteNames.welcome,
       path: '/welcome',
-      builder: (context, state) => const WelcomeScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const WelcomeScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.mainMenu,
       path: '/mainmenu',
-      builder: (context, state) => const MainMenuScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const MainMenuScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.mindmap,
       path: '/mindmap',
-      builder: (context, state) => const MindMap(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const MindMap(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.addLessons,
       path: '/addLessons',
-      builder: (context, state) => LessonScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const LessonScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.viewLessons,
       path: '/viewLessons',
-      builder: (context, state) => LessonListScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const LessonListScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.addtopic,
       path: '/addTopics',
-      builder: (context, state) => TopicScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const TopicScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.viewtopics,
       path: '/viewTopics',
-      builder: (context, state) => TopicListScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const TopicListScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.phrases,
       path: '/phrases',
-      builder: (context, state) => FrasesMotivacionales(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const FrasesMotivacionales(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
     GoRoute(
       name: RouteNames.reminders,
       path: '/reminders',
-      builder: (context, state) => ReminderScreen(),
+      pageBuilder: (context, state) {
+        final isforward = state.extra == 'forward';
+        return AppPageTransition(
+          child: const ReminderScreen(),
+          isForward: isforward ?? true,
+        );
+      },
     ),
   ],
 );
