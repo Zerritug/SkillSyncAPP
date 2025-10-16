@@ -98,7 +98,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       ElevatedButton(
                         onPressed: _usernameadd,
                         style: ButtonStyles.elevatedbutton1,

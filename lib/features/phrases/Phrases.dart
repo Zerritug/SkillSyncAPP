@@ -19,7 +19,7 @@ class FrasesMotivacionales extends StatelessWidget {
       appBar: AppBar(title: Text(loc.motivationalPhrasesTitle)),
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           children: [
             ElevatedButton(
               onPressed: () async {
@@ -51,30 +51,34 @@ class FrasesMotivacionales extends StatelessWidget {
               style: ButtonStyles.elevatedbutton1,
               child: Text(loc.addButton, style: AppTextStyles.button3),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.tertiary,
-                border: Border.all(width: 0.5, color: AppColors.sixtiary),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              width: 350,
-              height: 500,
-              child: ListView.builder(
-                itemCount: phraseProvider.phrases.length,
-                itemBuilder: (_, index) {
-                  final phrase = phraseProvider.phrases[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTile(
-                      title: Text(phrase.text),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed:
-                            () => phraseProvider.deletePhrase(phrase.id!),
-                      ),
-                    ),
-                  );
-                },
+            Expanded(
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.tertiary,
+                    border: Border.all(width: 0.5, color: AppColors.sixtiary),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  width: 350,
+                  height: 500,
+                  child: ListView.builder(
+                    itemCount: phraseProvider.phrases.length,
+                    itemBuilder: (_, index) {
+                      final phrase = phraseProvider.phrases[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: ListTile(
+                          title: Text(phrase.text),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed:
+                                () => phraseProvider.deletePhrase(phrase.id!),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 20),
