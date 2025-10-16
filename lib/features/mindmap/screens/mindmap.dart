@@ -28,17 +28,15 @@ class _MindMapState extends State<MindMap> {
   @override
   void initState() {
     super.initState();
-
+    // ✅ Usar BuchheimWalkerAlgorithm que funciona mejor con grafos pequeños
     algorithm = BuchheimWalkerAlgorithm(
-      BuchheimWalkerConfiguration(
-        siblingSeparation: 50,
-        levelSeparation: 50,
-        subtreeSeparation: 50,
-        orientation: BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM,
-      ),
-      null,
+      BuchheimWalkerConfiguration()
+        ..siblingSeparation = 50
+        ..levelSeparation = 50
+        ..subtreeSeparation = 50
+        ..orientation = BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM,
+      TreeEdgeRenderer(BuchheimWalkerConfiguration()),
     );
-
     _loadData();
   }
 
@@ -56,14 +54,14 @@ class _MindMapState extends State<MindMap> {
     topics = topicResult.map((e) => Topic.fromMap(e)).toList();
     lessons = lessonResult.map((e) => Lesson.fromMap(e)).toList();
 
-    // grafo INMEDIATAMENTE después de cargar datos
-
+    // ✅ Construir el grafo INMEDIATAMENTE después de cargar datos
+    // usando addPostFrameCallback para que ocurra después del siguiente frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
       if (l10n != null) {
         _buildGraph(l10n.graphRootTitle);
-
+        // ✅ Solo cambiar isLoading DESPUÉS de construir el grafo
         if (mounted) {
           setState(() {
             isLoading = false;
@@ -86,7 +84,7 @@ class _MindMapState extends State<MindMap> {
 
     // Si no hay topics, el grafo solo tendrá el nodo raíz
     if (topics.isEmpty) {
-      print('NO DATABASE');
+      print('⚠️ Warning: No topics found in database');
       return;
     }
 
@@ -187,7 +185,7 @@ class _MindMapState extends State<MindMap> {
                   ],
                 ),
               )
-              // Mostrar mensaje si no hay datos
+              // ✅ Mostrar mensaje si no hay datos
               : topics.isEmpty
               ? Center(
                 child: Column(
@@ -217,102 +215,81 @@ class _MindMapState extends State<MindMap> {
                   ],
                 ),
               )
-              : LayoutBuilder(
-                builder: (context, constraints) {
-                  return InteractiveViewer(
-                    constrained: false,
-                    boundaryMargin: const EdgeInsets.all(100),
-                    minScale: 0.01,
-                    maxScale: 5.0,
-                    child: Center(
-                      child: SizedBox(
-                        width: max(constraints.maxWidth, 600),
-                        height: max(constraints.maxHeight, 600),
-                        child: GraphView(
-                          graph: graph,
-                          algorithm: algorithm,
-                          paint:
-                              Paint()
-                                ..color =
-                                    isDarkMode ? Colors.white70 : Colors.blue
-                                ..strokeWidth = 1
-                                ..style = PaintingStyle.stroke,
-                          builder: (Node node) {
-                            final label =
-                                node.key?.value?.toString() ??
-                                l10n.graphNodeDefaultLabel;
+              : InteractiveViewer(
+                constrained: false,
+                boundaryMargin: const EdgeInsets.all(100),
+                minScale: 0.01,
+                maxScale: 5.0,
+                child: GraphView(
+                  graph: graph,
+                  algorithm: algorithm,
+                  paint:
+                      Paint()
+                        ..color = isDarkMode ? Colors.white70 : Colors.blue
+                        ..strokeWidth = 1
+                        ..style = PaintingStyle.stroke,
+                  builder: (Node node) {
+                    final label =
+                        node.key?.value?.toString() ??
+                        l10n.graphNodeDefaultLabel;
 
-                            final topic = topics.firstWhere(
-                              (t) => t.title == label,
-                              orElse:
-                                  () => Topic(
-                                    id: -1,
-                                    title: '',
-                                    content: '',
-                                    date: '',
-                                    state: false,
-                                  ),
-                            );
+                    final topic = topics.firstWhere(
+                      (t) => t.title == label,
+                      orElse:
+                          () => Topic(
+                            id: -1,
+                            title: '',
+                            content: '',
+                            date: '',
+                            state: false,
+                          ),
+                    );
 
-                            final isTopic = topic.id != -1;
-                            final progress =
-                                (isTopic && topic.id != null)
-                                    ? calculateProgressForTopic(topic.id!)
-                                    : 0;
+                    final isTopic = topic.id != -1;
+                    final progress =
+                        (isTopic && topic.id != null)
+                            ? calculateProgressForTopic(topic.id!)
+                            : 0;
 
-                            return GestureDetector(
-                              onTap: () {
-                                if (!mounted) return;
-                                if (isTopic) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        l10n.snackbarTopicProgress(
-                                          label,
-                                          progress,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Card(
-                                color:
-                                    isTopic
-                                        ? (isDarkMode
-                                            ? const Color(0xFF252525)
-                                            : const Color.fromARGB(
-                                              255,
-                                              240,
-                                              240,
-                                              240,
-                                            ))
-                                        : cardTopicColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                elevation: isDarkMode ? 2 : 4,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    isTopic ? '$label ($progress%)' : label,
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontWeight:
-                                          isTopic
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
+                    return GestureDetector(
+                      onTap: () {
+                        if (!mounted) return;
+                        if (isTopic) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                l10n.snackbarTopicProgress(label, progress),
                               ),
-                            );
-                          },
+                            ),
+                          );
+                        }
+                      },
+                      child: Card(
+                        color:
+                            isTopic
+                                ? (isDarkMode
+                                    ? const Color(0xFF252525)
+                                    : const Color.fromARGB(255, 240, 240, 240))
+                                : cardTopicColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: isDarkMode ? 2 : 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            isTopic ? '$label ($progress%)' : label,
+                            style: TextStyle(
+                              color: textColor,
+                              fontWeight:
+                                  isTopic ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
     );
   }
