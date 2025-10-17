@@ -1,0 +1,388 @@
+{
+  "@@locale": "en",
+
+  "loadingUser": "Loading user...",
+  "@loadingUser": {
+    "description": "Text shown while user data is loading"
+  },
+  "welcomeUser": "Welcome, {name}",
+  "@welcomeUser": {
+    "description": "Welcome message with the user's name"
+  },
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings dialog title"
+  },
+  "darkThemeLabel": "Dark theme",
+  "@darkThemeLabel": {
+    "description": "Label for dark theme toggle"
+  },
+  "closeButton": "Close",
+  "@closeButton": {
+    "description": "Text for the close dialog button"
+  },
+
+  "addObjectiveTitle": "Add Objective",
+  "@addObjectiveTitle": {
+    "description": "Title for adding a weekly objective"
+  },
+  "titleLabel": "Title",
+  "@titleLabel": {
+    "description": "Label for objective title field"
+  },
+  "descriptionLabel": "Description",
+  "@descriptionLabel": {
+    "description": "Label for objective description field"
+  },
+  "dateLabel": "Date",
+  "@dateLabel": {
+    "description": "Label for objective date field"
+  },
+  "completedLabel": "Completed",
+  "@completedLabel": {
+    "description": "Checkbox text for marking objective completed"
+  },
+  "missingData": "Missing data",
+  "@missingData": {
+    "description": "Error message when form data is missing"
+  },
+  "objectiveAdded": "Objective added successfully",
+  "@objectiveAdded": {
+    "description": "Message shown when an objective is successfully added"
+  },
+  "saveButton": "Save",
+  "@saveButton": {
+    "description": "Generic save button text"
+  },
+  "cancelButton": "Cancel",
+  "@cancelButton": {
+    "description": "Generic cancel button text"
+  },
+  "objectiveDeleted": "Objective deleted successfully",
+  "@objectiveDeleted": {
+    "description": "Message shown when an objective is successfully deleted"
+  },
+
+  "phrasesButton": "Phrases",
+  "@phrasesButton": {
+    "description": "Button text to navigate to phrases screen"
+  },
+  "remindersButton": "Reminders",
+  "@remindersButton": {
+    "description": "Button text to navigate to reminders screen"
+  },
+  "mindMapsButton": "Mind Maps",
+  "@mindMapsButton": {
+    "description": "Button text to navigate to mind maps screen"
+  },
+  "quickActionsTitle": "Quick Actions",
+  "@quickActionsTitle": {
+    "description": "Title of quick actions section"
+  },
+  "addLessonsButton": "Add Lessons",
+  "@addLessonsButton": {
+    "description": "Button text to add lessons"
+  },
+  "addTopicButton": "Add Topic",
+  "@addTopicButton": {
+    "description": "Button text to add a topic"
+  },
+  "viewLessonsButton": "View Lessons",
+  "@viewLessonsButton": {
+    "description": "Button text to view lessons"
+  },
+  "viewTopicsButton": "View Topics",
+  "@viewTopicsButton": {
+    "description": "Button text to view topics"
+  },
+  "weeklyObjectivesTitle": "Weekly Objectives",
+  "@weeklyObjectivesTitle": {
+    "description": "Title for the weekly objectives section"
+  },
+  "addButton": "Add",
+  "@addButton": {
+    "description": "Generic add button text"
+  },
+  "statusLabel": "Status: {state}",
+  "@statusLabel": {
+    "description": "Label showing objective status (completed or pending)"
+  },
+  "completedStatus": "Completed",
+  "@completedStatus": {
+    "description": "Text indicating completed status"
+  },
+  "pendingStatus": "Pending",
+  "@pendingStatus": {
+    "description": "Text indicating pending status"
+  },
+
+  "motivationalPhrasesTitle": "Motivational Phrases",
+  "@motivationalPhrasesTitle": {
+    "description": "Title of the motivational phrases screen"
+  },
+  "addPhraseTitle": "Add Phrase",
+  "@addPhraseTitle": {
+    "description": "Title of the dialog for adding a new phrase"
+  },
+  "backButton": "Back",
+  "@backButton": {
+    "description": "Button text to return to the main menu"
+  },
+
+  "remindersTitle": "Reminders",
+  "@remindersTitle": {
+    "description": "Title of the reminders screen"
+  },
+  "activatedNotificationLog": "Notification activated for {message}",
+  "@activatedNotificationLog": {
+    "description": "Console message when a notification is activated"
+  },
+  "cancelledNotificationLog": "Notification canceled for {message}",
+  "@cancelledNotificationLog": {
+    "description": "Console message when a notification is canceled"
+  },
+  "scheduledChannelName": "Scheduled Reminders",
+  "@scheduledChannelName": {
+    "description": "Name of the scheduled notification channel"
+  },
+  "scheduledChannelDescription": "Channel for scheduled notifications",
+  "@scheduledChannelDescription": {
+    "description": "Description of the scheduled notification channel"
+  },
+  "openNotificationSettings": "Open notification settings",
+  "@openNotificationSettings": {
+    "description": "Text of the button to open system notification settings"
+  },
+  "viewPendingNotifications": "View pending notifications",
+  "@viewPendingNotifications": {
+    "description": "Text of the button to view pending notifications"
+  },
+  "pendingNotificationsCount": "There are {count} pending notifications",
+  "@pendingNotificationsCount": {
+    "description": "Message showing the number of pending notifications"
+  },
+  "testScheduledChannelButton": "Test scheduled channel",
+  "@testScheduledChannelButton": {
+    "description": "Button to test whether the scheduled notification channel works"
+  },
+  "testScheduledChannelTitle": "Scheduled Channel Test",
+  "@testScheduledChannelTitle": {
+    "description": "Title for the scheduled channel test notification"
+  },
+  "testScheduledChannelBody": "Does this channel show notifications?",
+  "@testScheduledChannelBody": {
+    "description": "Body text for the scheduled channel test notification"
+  },
+
+  "lessonsListTitle": "Lesson List",
+  "@lessonsListTitle": {
+    "description": "Title of the lesson list screen"
+  },
+  "searchLessonLabel": "Search lesson",
+  "@searchLessonLabel": {
+    "description": "Label for the lesson search field"
+  },
+  "searchButton": "Search",
+  "@searchButton": {
+    "description": "Text for the search button"
+  },
+  "emptyFieldMessage": "The field is empty",
+  "@emptyFieldMessage": {
+    "description": "Message when the search field is empty"
+  },
+  "invalidDateFormatMessage": "Invalid format. Use DD/MM/YYYY",
+  "@invalidDateFormatMessage": {
+    "description": "Message when the date format entered is invalid"
+  },
+  "textNotFoundMessage": "Text not found",
+  "@textNotFoundMessage": {
+    "description": "Message when the searched text is not found"
+  },
+  "deleteSuccess": "Deleted successfully",
+  "@deleteSuccess": {
+    "description": "Message when a lesson is successfully deleted"
+  },
+  "editLessonTitle": "Edit lesson",
+  "@editLessonTitle": {
+    "description": "Title for the edit lesson dialog"
+  },
+  "editTitleLabel": "Edit title",
+  "@editTitleLabel": {
+    "description": "Label for the title text field"
+  },
+  "editContentLabel": "Edit content",
+  "@editContentLabel": {
+    "description": "Label for the content text field"
+  },
+  "editDateLabel": "Edit date",
+  "@editDateLabel": {
+    "description": "Label for the date text field"
+  },
+  "editCategoryIdLabel": "Edit category ID",
+  "@editCategoryIdLabel": {
+    "description": "Label for the category ID text field"
+  },
+  "editSuccess": "Edited successfully",
+  "@editSuccess": {
+    "description": "Message when a lesson is successfully edited"
+  },
+
+  "statusLabelLesson": "Status: {status}",
+  "@statusLabelLesson": {
+    "description": "Label showing the lesson status",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Completed"
+      }
+    }
+  },
+
+  "topicListTitle": "Topic List",
+  "@topicListTitle": {
+    "description": "Title of the topic list screen"
+  },
+  "searchTopicLabel": "Search topic",
+  "@searchTopicLabel": {
+    "description": "Label for the topic search field"
+  },
+  "emptyTopicFieldMessage": "The field is empty",
+  "@emptyTopicFieldMessage": {
+    "description": "Message when the topic search field is empty"
+  },
+  "editTopicTitle": "Edit topic",
+  "@editTopicTitle": {
+    "description": "Title for the edit topic dialog"
+  },
+  "editTopicContentLabel": "Edit content",
+  "@editTopicContentLabel": {
+    "description": "Label for topic content text field"
+  },
+  "editTopicDateLabel": "Edit date",
+  "@editTopicDateLabel": {
+    "description": "Label for topic date text field"
+  },
+  "editTopicCompletedLabel": "Completed",
+  "@editTopicCompletedLabel": {
+    "description": "Label for completed checkbox in topic"
+  },
+  "topicDeleteSuccess": "Topic deleted successfully",
+  "@topicDeleteSuccess": {
+    "description": "Message when a topic is deleted successfully"
+  },
+  "topicSearchInvalidDate": "Invalid format. Use DD/MM/YYYY",
+  "@topicSearchInvalidDate": {
+    "description": "Message when topic search date format is invalid"
+  },
+  "topicSearchTextNotFound": "Text not found",
+  "@topicSearchTextNotFound": {
+    "description": "Message when searched text is not found in topics"
+  },
+
+  "topicScreenTitleADD": "Add Topic",
+  "@topicScreenTitleADD": {
+    "description": "AppBar title in add topic screen"
+  },
+  "titleLabelADD": "Title",
+  "@titleLabelADD": {
+    "description": "Label for topic title text field"
+  },
+  "contentLabelADD": "Content",
+  "@contentLabelADD": {
+    "description": "Label for topic content text field"
+  },
+  "dateLabelADD": "Date",
+  "@dateLabelADD": {
+    "description": "Label for topic date text field"
+  },
+  "completedLabelADD": "Completed",
+  "@completedLabelADD": {
+    "description": "Label next to checkbox indicating if topic is completed"
+  },
+  "saveButtonADD": "Save",
+  "@saveButtonADD": {
+    "description": "Button text to save the topic"
+  },
+  "viewTopicsButtonADD": "View Topics",
+  "@viewTopicsButtonADD": {
+    "description": "Button text to navigate to view topics screen"
+  },
+  "backButtonADD": "Back",
+  "@backButtonADD": {
+    "description": "Button text to return to main menu"
+  },
+  "missingDataMessageADD": "Missing data",
+  "@missingDataMessageADD": {
+    "description": "Message when fields are missing"
+  },
+  "topicAddedMessageADD": "Topic added",
+  "@topicAddedMessageADD": {
+    "description": "Message when a topic is successfully added"
+  },
+
+  "mindMapTitle": "Mind Map",
+  "@mindMapTitle": {
+    "description": "Title of the Mind Map screen"
+  },
+  "loadingMessage": "Loading...",
+  "@loadingMessage": {
+    "description": "Message shown while data is loading"
+  },
+  "graphRootTitle": "Topics",
+  "@graphRootTitle": {
+    "description": "Label for root node in mind map graph"
+  },
+  "graphNodeDefaultLabel": "Node",
+  "@graphNodeDefaultLabel": {
+    "description": "Default label for a graph node when no title is found"
+  },
+  "snackbarTopicProgress": "Topic: {label}\nProgress: {progress}%",
+  "@snackbarTopicProgress": {
+    "description": "Snackbar message showing topic name and progress",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Mathematics"
+      },
+      "progress": {
+        "type": "int",
+        "example": "80"
+      }
+    }
+  },
+
+    
+  
+
+  "lessonScreenTitle": "Add Lesson",
+  "@lessonScreenTitle": {
+    "description": "Title of the add lesson screen"
+  },
+
+  
+
+  "categoryIdLabel": "Category ID",
+  "@categoryIdLabel": {
+    "description": "Label for the text field for the category ID"
+  },
+
+
+  
+
+  "invalidCategoryIdMessage": "Invalid category ID",
+  "@invalidCategoryIdMessage": {
+    "description": "Message shown when the category ID is not a number"
+  },
+
+  "topicNotFoundMessage": "Topic does not exist",
+  "@topicNotFoundMessage": {
+    "description": "Message shown when the topic associated with the ID is not found"
+  },
+
+  "lessonAddedMessage": "Lesson added",
+  "@lessonAddedMessage": {
+    "description": "Message shown when the lesson is successfully added"
+  }
+
+}

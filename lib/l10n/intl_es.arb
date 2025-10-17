@@ -1,0 +1,409 @@
+{
+  "@@locale": "es",
+
+  "loadingUser": "Cargando usuario...",
+  "@loadingUser": {
+    "description": "Texto mostrado mientras se cargan los datos del usuario"
+  },
+  "welcomeUser": "Bienvenido, {name}",
+  "@welcomeUser": {
+    "description": "Mensaje de bienvenida con el nombre del usuario"
+  },
+
+  "settingsTitle": "Configuración",
+  "@settingsTitle": {
+    "description": "Título del cuadro de diálogo de configuración"
+  },
+  "darkThemeLabel": "Tema oscuro",
+  "@darkThemeLabel": {
+    "description": "Etiqueta para el interruptor de tema oscuro"
+  },
+  "closeButton": "Cerrar",
+  "@closeButton": {
+    "description": "Texto del botón para cerrar el cuadro de diálogo"
+  },
+
+  "addObjectiveTitle": "Agregar objetivo",
+  "@addObjectiveTitle": {
+    "description": "Título para agregar un objetivo semanal"
+  },
+  "titleLabel": "Título",
+  "@titleLabel": {
+    "description": "Etiqueta del campo de título del objetivo"
+  },
+  "descriptionLabel": "Descripción",
+  "@descriptionLabel": {
+    "description": "Etiqueta del campo de descripción del objetivo"
+  },
+  "dateLabel": "Fecha",
+  "@dateLabel": {
+    "description": "Etiqueta del campo de fecha del objetivo"
+  },
+  "completedLabel": "Completado",
+  "@completedLabel": {
+    "description": "Texto del checkbox para marcar el objetivo como completado"
+  },
+  "missingData": "Faltan datos",
+  "@missingData": {
+    "description": "Mensaje de error cuando faltan datos en el formulario"
+  },
+  "objectiveAdded": "Objetivo agregado correctamente",
+  "@objectiveAdded": {
+    "description": "Mensaje mostrado cuando un objetivo se agrega correctamente"
+  },
+  "saveButton": "Guardar",
+  "@saveButton": {
+    "description": "Texto genérico del botón para guardar"
+  },
+  "cancelButton": "Cancelar",
+  "@cancelButton": {
+    "description": "Texto genérico del botón para cancelar"
+  },
+  "objectiveDeleted": "Objetivo eliminado correctamente",
+  "@objectiveDeleted": {
+    "description": "Mensaje mostrado cuando un objetivo se elimina correctamente"
+  },
+
+  "phrasesButton": "Frases",
+  "@phrasesButton": {
+    "description": "Texto del botón para ir a la pantalla de frases"
+  },
+  "remindersButton": "Recordatorios",
+  "@remindersButton": {
+    "description": "Texto del botón para ir a la pantalla de recordatorios"
+  },
+  "mindMapsButton": "Mapas mentales",
+  "@mindMapsButton": {
+    "description": "Texto del botón para ir a la pantalla de mapas mentales"
+  },
+  "quickActionsTitle": "Acciones rápidas",
+  "@quickActionsTitle": {
+    "description": "Título de la sección de acciones rápidas"
+  },
+  "addLessonsButton": "Agregar lecciones",
+  "@addLessonsButton": {
+    "description": "Texto del botón para agregar lecciones"
+  },
+  "addTopicButton": "Agregar tema",
+  "@addTopicButton": {
+    "description": "Texto del botón para agregar un tema"
+  },
+  "viewLessonsButton": "Ver lecciones",
+  "@viewLessonsButton": {
+    "description": "Texto del botón para ver lecciones"
+  },
+  "viewTopicsButton": "Ver temas",
+  "@viewTopicsButton": {
+    "description": "Texto del botón para ver temas"
+  },
+  "weeklyObjectivesTitle": "Objetivos semanales",
+  "@weeklyObjectivesTitle": {
+    "description": "Título de la sección de objetivos semanales"
+  },
+  "addButton": "Agregar",
+  "@addButton": {
+    "description": "Texto genérico del botón para agregar"
+  },
+  "statusLabel": "Estado: {state}",
+  "@statusLabel": {
+    "description": "Etiqueta que muestra el estado del objetivo (completado o pendiente)"
+  },
+  "completedStatus": "Completado",
+  "@completedStatus": {
+    "description": "Texto que indica estado completado"
+  },
+  "pendingStatus": "Pendiente",
+  "@pendingStatus": {
+    "description": "Texto que indica estado pendiente"
+  },
+
+  "motivationalPhrasesTitle": "Frases motivacionales",
+  "@motivationalPhrasesTitle": {
+    "description": "Título de la pantalla de frases motivacionales"
+  },
+  "addPhraseTitle": "Agregar frase",
+  "@addPhraseTitle": {
+    "description": "Título del cuadro de diálogo para agregar una nueva frase"
+  },
+  "backButton": "Volver",
+  "@backButton": {
+    "description": "Texto del botón para volver al menú principal"
+  },
+
+  "remindersTitle": "Recordatorios",
+  "@remindersTitle": {
+    "description": "Título de la pantalla de recordatorios"
+  },
+  "activatedNotificationLog": "Notificación activada para {message}",
+  "@activatedNotificationLog": {
+    "description": "Mensaje de consola cuando se activa una notificación"
+  },
+  "cancelledNotificationLog": "Notificación cancelada para {message}",
+  "@cancelledNotificationLog": {
+    "description": "Mensaje de consola cuando se cancela una notificación"
+  },
+  "scheduledChannelName": "Recordatorios programados",
+  "@scheduledChannelName": {
+    "description": "Nombre del canal de notificaciones programadas"
+  },
+  "scheduledChannelDescription": "Canal para notificaciones programadas",
+  "@scheduledChannelDescription": {
+    "description": "Descripción del canal de notificaciones programadas"
+  },
+  "openNotificationSettings": "Abrir configuración de notificaciones",
+  "@openNotificationSettings": {
+    "description": "Texto del botón para abrir la configuración del sistema"
+  },
+  "viewPendingNotifications": "Ver notificaciones pendientes",
+  "@viewPendingNotifications": {
+    "description": "Texto del botón para ver notificaciones pendientes"
+  },
+  "pendingNotificationsCount": "Hay {count} notificaciones pendientes",
+  "@pendingNotificationsCount": {
+    "description": "Mensaje que muestra la cantidad de notificaciones pendientes"
+  },
+  "testScheduledChannelButton": "Probar canal programado",
+  "@testScheduledChannelButton": {
+    "description": "Botón para probar si el canal de notificaciones funciona"
+  },
+  "testScheduledChannelTitle": "Prueba de canal programado",
+  "@testScheduledChannelTitle": {
+    "description": "Título de la notificación de prueba del canal programado"
+  },
+  "testScheduledChannelBody": "¿Este canal muestra notificaciones?",
+  "@testScheduledChannelBody": {
+    "description": "Texto del cuerpo de la notificación de prueba del canal programado"
+  },
+
+  "lessonsListTitle": "Lista de lecciones",
+  "@lessonsListTitle": {
+    "description": "Título de la pantalla de lista de lecciones"
+  },
+  "searchLessonLabel": "Buscar lección",
+  "@searchLessonLabel": {
+    "description": "Etiqueta del campo de búsqueda de lección"
+  },
+  "searchButton": "Buscar",
+  "@searchButton": {
+    "description": "Texto del botón de búsqueda"
+  },
+  "emptyFieldMessage": "El campo está vacío",
+  "@emptyFieldMessage": {
+    "description": "Mensaje cuando el campo de búsqueda está vacío"
+  },
+  "invalidDateFormatMessage": "Formato inválido. Usa DD/MM/YYYY",
+  "@invalidDateFormatMessage": {
+    "description": "Mensaje cuando el formato de fecha ingresado es inválido"
+  },
+  "textNotFoundMessage": "Texto no encontrado",
+  "@textNotFoundMessage": {
+    "description": "Mensaje cuando no se encuentra el texto buscado"
+  },
+  "deleteSuccess": "Eliminado correctamente",
+  "@deleteSuccess": {
+    "description": "Mensaje cuando una lección se elimina correctamente"
+  },
+  "editLessonTitle": "Editar lección",
+  "@editLessonTitle": {
+    "description": "Título del cuadro de diálogo para editar una lección"
+  },
+  
+  "editContentLabel": "Editar contenido",
+  "@editContentLabel": {
+    "description": "Etiqueta del campo para editar el contenido"
+  },
+  "editDateLabel": "Editar fecha",
+  "@editDateLabel": {
+    "description": "Etiqueta del campo para editar la fecha"
+  },
+  "editCategoryIdLabel": "Editar ID de categoría",
+  "@editCategoryIdLabel": {
+    "description": "Etiqueta del campo para editar el ID de categoría"
+  },
+
+  "statusLabelLesson": "Estado: {status}",
+  "@statusLabelLesson": {
+    "description": "Etiqueta que muestra el estado de la lección",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Completada"
+      }
+    }
+  },
+  "topicListTitle": "Lista de temas",
+  "@topicListTitle": {
+    "description": "Título de la pantalla de lista de temas"
+  },
+  "searchTopicLabel": "Buscar tema",
+  "@searchTopicLabel": {
+    "description": "Etiqueta del campo de búsqueda de temas"
+  },
+  "emptyTopicFieldMessage": "El campo está vacío",
+  "@emptyTopicFieldMessage": {
+    "description": "Mensaje cuando el campo de búsqueda de temas está vacío"
+  },
+  "editTopicTitle": "Editar tema",
+  "@editTopicTitle": {
+    "description": "Título del cuadro de diálogo para editar un tema"
+  },
+  "editTopicContentLabel": "Editar contenido",
+  "@editTopicContentLabel": {
+    "description": "Etiqueta del campo de texto para editar contenido de tema"
+  },
+  "editTopicDateLabel": "Editar fecha",
+  "@editTopicDateLabel": {
+    "description": "Etiqueta del campo de texto para editar fecha de tema"
+  },
+  "editTopicCompletedLabel": "Completado",
+  "@editTopicCompletedLabel": {
+    "description": "Etiqueta del checkbox de estado completado en tema"
+  },
+  "topicDeleteSuccess": "Tema eliminado correctamente",
+  "@topicDeleteSuccess": {
+    "description": "Mensaje cuando un tema se elimina correctamente"
+  },
+  "topicSearchInvalidDate": "Formato inválido. Usa DD/MM/YYYY",
+  "@topicSearchInvalidDate": {
+    "description": "Mensaje cuando la fecha ingresada para buscar un tema es inválida"
+  },
+  "topicSearchTextNotFound": "Texto no encontrado",
+  "@topicSearchTextNotFound": {
+    "description": "Mensaje cuando no se encuentra el texto buscado en temas"
+  },
+    "editTitleLabel": "Editar título",
+  "@editTitleLabel": {
+    "description": "Etiqueta del campo de texto para editar el título del tema"
+  },
+  "editSuccess": "Editado correctamente",
+  "@editSuccess": {
+    "description": "Mensaje cuando un tema se edita correctamente"
+  },
+  
+ 
+
+
+   "mindMapTitle": "Mapa Mental",
+  "@mindMapTitle": {
+    "description": "Título de la pantalla del mapa mental"
+  },
+  "loadingMessage": "Cargando...",
+  "@loadingMessage": {
+    "description": "Mensaje que aparece mientras se cargan los datos"
+  },
+  "graphRootTitle": "Temas",
+  "@graphRootTitle": {
+    "description": "Etiqueta del nodo raíz en el grafo del mapa mental"
+  },
+  "graphNodeDefaultLabel": "Nodo",
+  "@graphNodeDefaultLabel": {
+    "description": "Etiqueta predeterminada para un nodo del grafo cuando no se encuentra título"
+  },
+  "snackbarTopicProgress": "Tema: {label}\\nProgreso: {progress}%",
+  "@snackbarTopicProgress": {
+    "description": "Mensaje mostrado en un SnackBar al tocar un tema",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Tema de ejemplo"
+      },
+      "progress": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  
+
+
+  "topicScreenTitleADD": "Agregar Tema",
+  "@topicScreenTitleADD": {
+    "description": "Título de la AppBar en la pantalla de agregar tema"
+  },
+
+  "titleLabelADD": "Título",
+  "@titleLabelADD": {
+    "description": "Etiqueta del campo de texto para el título del tema"
+  },
+
+  "contentLabelADD": "Contenido",
+  "@contentLabelADD": {
+    "description": "Etiqueta del campo de texto para el contenido del tema"
+  },
+
+  "dateLabelADD": "Fecha",
+  "@dateLabelADD": {
+    "description": "Etiqueta del campo de texto para la fecha del tema"
+  },
+
+  "completedLabelADD": "Completado",
+  "@completedLabelADD": {
+    "description": "Etiqueta junto al checkbox que indica si el tema está completado"
+  },
+
+  "saveButtonADD": "Guardar",
+  "@saveButtonADD": {
+    "description": "Texto del botón para guardar el tema"
+  },
+
+  "viewTopicsButtonADD": "Ver Temas",
+  "@viewTopicsButtonADD": {
+    "description": "Texto del botón para ir a la pantalla de ver temas"
+  },
+
+  "backButtonADD": "Volver",
+  "@backButtonADD": {
+    "description": "Texto del botón para volver al menú principal"
+  },
+
+  "missingDataMessageADD": "Faltan datos",
+  "@missingDataMessageADD": {
+    "description": "Mensaje mostrado cuando faltan campos por llenar"
+  },
+
+  "topicAddedMessageADD": "Tema agregado",
+  "@topicAddedMessageADD": {
+    "description": "Mensaje mostrado cuando se agrega un tema exitosamente"
+  },
+  
+
+  "lessonScreenTitle": "Agregar Lección",
+  "@lessonScreenTitle": {
+    "description": "Título de la pantalla de agregar lección"
+  },
+
+  
+
+  "categoryIdLabel": "ID Categoría",
+  "@categoryIdLabel": {
+    "description": "Etiqueta del campo de texto para el ID de categoría"
+  },
+
+
+  "missingDataMessage": "Faltan datos",
+  "@missingDataMessage": {
+    "description": "Mensaje mostrado cuando algún campo está vacío"
+  },
+
+  "invalidCategoryIdMessage": "Id de categoría inválido",
+  "@invalidCategoryIdMessage": {
+    "description": "Mensaje mostrado cuando el ID de categoría no es un número"
+  },
+
+  "topicNotFoundMessage": "El tema no existe",
+  "@topicNotFoundMessage": {
+    "description": "Mensaje cuando no se encuentra el tema asociado al ID"
+  },
+
+  "lessonAddedMessage": "Lección agregada",
+  "@lessonAddedMessage": {
+    "description": "Mensaje cuando la lección se agrega exitosamente"
+  }
+
+}
+
+  
+
+
+
+  

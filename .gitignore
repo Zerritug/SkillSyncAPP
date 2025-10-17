@@ -60,8 +60,6 @@ firebase-debug.log
 lib/**.g.dart
 lib/**.drift.dart
 
-# Internacionalización
-lib/l10n/*.arb
 
 # Miscellaneous
 *.class
